@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<Pane xmlns:fx="http://javafx.com/fxml" fx:id="mainPanel" xmlns="http://javafx.com/javafx"
+      fx:controller="fr.ensicaen.oware.controllers.MainController" prefHeight="400.0" prefWidth="600.0"
+      styleClass="main-panel" stylesheets="@../styles/main.css">
+    <ImageView fitHeight="533.0" fitWidth="800.0" layoutX="0" layoutY="0" pickOnBounds="true" preserveRatio="true">
+        <image>
+            <Image url="@../images/background.jpg"/>
+        </image>
+    </ImageView>
+</Pane>
