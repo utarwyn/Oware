@@ -16,7 +16,7 @@ public class MainController {
     private Pane mainPanel;
 
     public void createWindowMover() {
-        new fr.ensicaen.oware.controllers.WindowMover(this.main.getStage(), this.mainPanel);
+        new WindowMover(this.main.getStage(), this.mainPanel);
     }
 
 }

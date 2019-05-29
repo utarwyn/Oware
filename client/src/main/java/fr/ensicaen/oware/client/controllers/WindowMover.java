@@ -1,4 +1,4 @@
-package fr.ensicaen.oware.controllers;
+package fr.ensicaen.oware.client.controllers;
 
 import javafx.scene.Node;
 import javafx.stage.Stage;
