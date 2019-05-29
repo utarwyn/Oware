@@ -1,48 +1,66 @@
-apply plugin: 'application'
-apply plugin: 'java'
+allprojects {
+    apply plugin: 'application'
+    apply plugin: 'java'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-compileJava.options.encoding = 'UTF-8'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    compileJava.options.encoding = 'UTF-8'
 
-tasks.withType(Jar) {
-    destinationDir = file("$rootDir/out/artifacts/$rootProject.name/")
-}
-
-mainClassName = "fr.ensicaen.oware.Main"
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    compileOnly 'org.projectlombok:lombok:1.16.18'
-}
-
-
-jar {
-    // Tune the java manifest, to tell about the main class
-    manifest {
-        attributes(
-                'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
-                'Main-Class': mainClassName
-        )
+    repositories {
+        mavenCentral()
     }
 
-    // tells to put all dependencies jars to our fat jar
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+        compileOnly 'org.projectlombok:lombok:1.16.18'
+    }
+
+    tasks.withType(Jar) {
+        destinationDir = file("$rootDir/out/artifacts/$rootProject.name/")
+    }
+
+    sourceSets {
+        main {
+            resources {
+                srcDirs = ["src/main/java", "src/main/resources"]
+
+                // Required to add fxml and xml to the jar
+                includes = ["**/*.fxml", "**/*.xml", "**/*.css", "**/*.png", "**/*.jpg"]
+            }
+        }
     }
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDirs = ["src/main/java", "src/main/resources"]
+project('client') {
+    mainClassName = "fr.ensicaen.oware.client.Main"
+    jar {
+        // Tune the java manifest, to tell about the main class
+        manifest {
+            attributes(
+                    'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                    'Main-Class': mainClassName
+            )
+        }
+        // tells to put all dependencies jars to our fat jar
+        from {
+            configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+    }
+}
 
-            // Required to add fxml and xml to the jar
-            includes = ["**/*.fxml", "**/*.xml", "**/*.css", "**/*.png", "**/*.jpg"]
+project('server') {
+    mainClassName = "fr.ensicaen.oware.server.Main"
+    jar {
+        // Tune the java manifest, to tell about the main class
+        manifest {
+            attributes(
+                    'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                    'Main-Class': mainClassName
+            )
+        }
+        // tells to put all dependencies jars to our fat jar
+        from {
+            configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
         }
     }
 }

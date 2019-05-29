@@ -1,6 +1,6 @@
-package fr.ensicaen.oware.controllers;
+package fr.ensicaen.oware.client.controllers;
 
-import fr.ensicaen.oware.Main;
+import fr.ensicaen.oware.client.Main;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import lombok.Getter;
@@ -16,7 +16,7 @@ public class MainController {
     private Pane mainPanel;
 
     public void createWindowMover() {
-        new WindowMover(this.main.getStage(), this.mainPanel);
+        new fr.ensicaen.oware.controllers.WindowMover(this.main.getStage(), this.mainPanel);
     }
 
 }

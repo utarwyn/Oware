@@ -1,6 +1,6 @@
-package fr.ensicaen.oware;
+package fr.ensicaen.oware.client;
 
-import fr.ensicaen.oware.controllers.MainController;
+import fr.ensicaen.oware.client.controllers.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
