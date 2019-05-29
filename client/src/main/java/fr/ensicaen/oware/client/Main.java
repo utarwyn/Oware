@@ -1,6 +1,7 @@
 package fr.ensicaen.oware.client;
 
 import fr.ensicaen.oware.client.controllers.MainController;
+import fr.ensicaen.oware.client.model.sockets.CapitalizeClient;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,11 +31,12 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         this.stage = primaryStage;
         this.buildRoot();
-        primaryStage.setTitle("Epidemic Simulation");
+        primaryStage.setTitle("Oware");
         this.buildStage();
         this.buildScene();
         this.stage.show();
 
+        new CapitalizeClient("localhost", 59898).connectToServer();
     }
 
     private void buildRoot() throws IOException {
