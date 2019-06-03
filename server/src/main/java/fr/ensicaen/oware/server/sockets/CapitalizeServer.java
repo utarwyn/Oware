@@ -1,4 +1,4 @@
-package fr.ensicaen.oware.server;
+package fr.ensicaen.oware.server.sockets;
 
 import lombok.Getter;
 

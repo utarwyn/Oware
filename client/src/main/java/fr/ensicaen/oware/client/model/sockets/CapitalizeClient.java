@@ -1,23 +1,38 @@
 package fr.ensicaen.oware.client.model.sockets;
 
-import lombok.AllArgsConstructor;
+import fr.ensicaen.oware.client.Main;
+import fr.ensicaen.oware.client.model.packets.PacketHandler;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-@AllArgsConstructor
 public class CapitalizeClient {
+
+    private Main main;
 
     private String host;
 
     private int port;
 
+    private PacketHandler packetHandler;
+
+    public CapitalizeClient(Main main, String host, int port) {
+        this.main = main;
+        this.host = host;
+        this.port = port;
+        this.packetHandler = new PacketHandler(this.main);
+    }
+
     public void connectToServer() {
-        try {
-            Socket socket = new Socket(this.host, this.port);
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            out.println("Test");
+        try (Socket socket = new Socket(this.host, this.port);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        ) {
+            // out.println(new Packet().serialize());
+            this.packetHandler.handle(reader.readLine());
         } catch (IOException e) {
             e.printStackTrace();
         }

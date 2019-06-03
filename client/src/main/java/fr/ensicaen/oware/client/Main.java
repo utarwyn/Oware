@@ -36,7 +36,7 @@ public class Main extends Application {
         this.buildScene();
         this.stage.show();
 
-        new CapitalizeClient("localhost", 59898).connectToServer();
+        (new Thread(() -> new CapitalizeClient(this, "localhost", 59898).connectToServer())).start();
     }
 
     private void buildRoot() throws IOException {
