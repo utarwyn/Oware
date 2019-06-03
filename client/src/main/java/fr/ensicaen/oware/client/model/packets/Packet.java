@@ -11,4 +11,8 @@ public class Packet {
 
     public static final Gson gson = new GsonBuilder().create();
 
+    public String serialize() {
+        return gson.toJson(this);
+    }
+
 }
