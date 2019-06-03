@@ -21,7 +21,6 @@ public class Capitalizer implements Runnable {
 
     @Override
     public void run() {
-        System.out.println(this.socket + " connected!");
         try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))
         ) {
