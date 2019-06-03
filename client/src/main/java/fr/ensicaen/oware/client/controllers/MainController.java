@@ -1,6 +1,6 @@
 package fr.ensicaen.oware.client.controllers;
 
-import fr.ensicaen.oware.client.Main;
+import fr.ensicaen.oware.client.applications.Main;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import lombok.Getter;

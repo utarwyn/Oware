@@ -1,6 +1,6 @@
 package fr.ensicaen.oware.client.model.sockets;
 
-import fr.ensicaen.oware.client.Main;
+import fr.ensicaen.oware.client.applications.Main;
 import fr.ensicaen.oware.client.model.packets.PacketHandler;
 
 import java.io.BufferedReader;

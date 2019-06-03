@@ -34,7 +34,7 @@ allprojects {
 }
 
 project('client') {
-    mainClassName = "fr.ensicaen.oware.client.Main"
+    mainClassName = "fr.ensicaen.oware.client.applications.Connection"
     jar {
         // Tune the java manifest, to tell about the main class
         manifest {

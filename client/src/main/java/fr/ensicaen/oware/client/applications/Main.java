@@ -1,4 +1,4 @@
-package fr.ensicaen.oware.client;
+package fr.ensicaen.oware.client.applications;
 
 import fr.ensicaen.oware.client.controllers.MainController;
 import fr.ensicaen.oware.client.model.sockets.CapitalizeClient;
@@ -23,8 +23,13 @@ public class Main extends Application {
 
     private MainController mainController;
 
-    public static void main(String[] args) {
-        launch(args);
+    private String hostname;
+
+    private int port;
+
+    public Main(String hostname, int port) {
+        this.hostname = hostname;
+        this.port = port;
     }
 
     @Override
@@ -36,7 +41,7 @@ public class Main extends Application {
         this.buildScene();
         this.stage.show();
 
-        (new Thread(() -> new CapitalizeClient(this, "localhost", 59898).connectToServer())).start();
+        (new Thread(() -> new CapitalizeClient(this, this.hostname, this.port).connectToServer())).start();
     }
 
     private void buildRoot() throws IOException {
@@ -49,7 +54,7 @@ public class Main extends Application {
     }
 
     private void buildScene() {
-        this.scene = new Scene(root, 600, 400);
+        this.scene = new Scene(root, 490, 490);
         this.scene.setFill(null);
         this.stage.setResizable(false);
         this.stage.setScene(this.scene);

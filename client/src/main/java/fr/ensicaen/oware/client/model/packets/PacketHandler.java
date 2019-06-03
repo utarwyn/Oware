@@ -1,6 +1,6 @@
 package fr.ensicaen.oware.client.model.packets;
 
-import fr.ensicaen.oware.client.Main;
+import fr.ensicaen.oware.client.applications.Main;
 
 public class PacketHandler {
 

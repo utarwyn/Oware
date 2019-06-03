@@ -6,7 +6,7 @@
 <Pane xmlns:fx="http://javafx.com/fxml" fx:id="mainPanel" xmlns="http://javafx.com/javafx"
       fx:controller="fr.ensicaen.oware.client.controllers.MainController" prefHeight="400.0" prefWidth="600.0"
       styleClass="main-panel" stylesheets="@../styles/main.css">
-    <ImageView fitHeight="533.0" fitWidth="800.0" layoutX="0" layoutY="0" pickOnBounds="true" preserveRatio="true">
+    <ImageView fitHeight="490" fitWidth="490" layoutX="0" layoutY="0" pickOnBounds="true" preserveRatio="true">
         <Image url="@../images/background.jpg"/>
     </ImageView>
 </Pane>
