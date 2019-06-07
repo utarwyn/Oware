@@ -1,6 +1,7 @@
 package fr.ensicaen.oware.client.model.sockets;
 
 import fr.ensicaen.oware.client.applications.Main;
+import fr.ensicaen.oware.client.model.packets.Packet;
 import fr.ensicaen.oware.client.model.packets.PacketHandler;
 
 import java.io.BufferedReader;
@@ -17,6 +18,8 @@ public class CapitalizeClient {
 
     private int port;
 
+    private Socket socket;
+
     private PacketHandler packetHandler;
 
     public CapitalizeClient(Main main, String host, int port) {
@@ -27,12 +30,22 @@ public class CapitalizeClient {
     }
 
     public void connectToServer() {
-        try (Socket socket = new Socket(this.host, this.port);
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        ) {
-            // out.println(new Packet().serialize());
+        try {
+            this.socket = new Socket(this.host, this.port);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             this.packetHandler.handle(reader.readLine());
+            this.socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendPacket(Packet packet) {
+        try (PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true)) {
+            out.println(packet.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

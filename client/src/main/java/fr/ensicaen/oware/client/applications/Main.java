@@ -27,6 +27,8 @@ public class Main extends Application {
 
     private int port;
 
+    private CapitalizeClient capitalizeClient;
+
     public Main(String hostname, int port) {
         this.hostname = hostname;
         this.port = port;
@@ -41,7 +43,10 @@ public class Main extends Application {
         this.buildScene();
         this.stage.show();
 
-        (new Thread(() -> new CapitalizeClient(this, this.hostname, this.port).connectToServer())).start();
+        (new Thread(() -> {
+            this.capitalizeClient = new CapitalizeClient(this, this.hostname, this.port);
+            capitalizeClient.connectToServer();
+        })).start();
     }
 
     private void buildRoot() throws IOException {

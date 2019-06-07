@@ -12,4 +12,9 @@ public class Packet {
     public String serialize() {
         return gson.toJson(this);
     }
+
+    @Override
+    public String toString() {
+        return this.serialize();
+    }
 }

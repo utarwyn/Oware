@@ -1,5 +1,6 @@
 package fr.ensicaen.oware.server.sockets;
 
+import fr.ensicaen.oware.server.packets.Packet;
 import fr.ensicaen.oware.server.packets.PacketHandler;
 
 import java.io.BufferedReader;
@@ -21,10 +22,7 @@ public class Capitalizer implements Runnable {
 
     @Override
     public void run() {
-        try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))
-        ) {
-            //out.println(new Packet().serialize());
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             String serializedPacket = reader.readLine();
             this.packetHandler.handle(serializedPacket);
         } catch (Exception e) {
@@ -39,4 +37,13 @@ public class Capitalizer implements Runnable {
             System.out.println("Closed: " + this.socket);
         }
     }
+
+    public void sendPacket(Packet packet) {
+        try (PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true)) {
+            out.println(packet.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

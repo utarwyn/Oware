@@ -41,7 +41,7 @@ public class CapitalizeServer {
                     } else if (this.secondClient == null) {
                         this.secondClient = capitalizer;
                         System.out.println("Second client connected!");
-                        this.main.setGame(new Game());
+                        this.main.setGame(new Game(this.main));
                     }
                     pool.execute(capitalizer);
                 }

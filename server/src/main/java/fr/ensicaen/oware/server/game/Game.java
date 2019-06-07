@@ -1,18 +1,20 @@
 package fr.ensicaen.oware.server.game;
 
-import java.util.Arrays;
+import fr.ensicaen.oware.server.Main;
 
 public class Game {
 
-    private Hole[] firstPlayerHoles;
-    private Hole[] secondPlayerHoles;
+    private Main main;
 
-    public Game() {
+    private Player fisrtPlayer;
+
+    private Player secondPlayer;
+
+    public Game(Main main) {
+        this.main = main;
         System.out.println("Game started!");
-        this.firstPlayerHoles = new Hole[6];
-        this.secondPlayerHoles = new Hole[6];
-        Arrays.fill(this.firstPlayerHoles, new Hole());
-        Arrays.fill(this.secondPlayerHoles, new Hole());
+        this.fisrtPlayer = new Player(this.main.getCapitalizeServer().getFirstClient());
+        this.secondPlayer = new Player(this.main.getCapitalizeServer().getSecondClient());
     }
 
 }
