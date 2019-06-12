@@ -1,5 +1,6 @@
 package fr.ensicaen.oware.server.game;
 
+import fr.ensicaen.oware.server.packets.datas.GameBoardData;
 import fr.ensicaen.oware.server.sockets.Capitalizer;
 import lombok.Getter;
 
@@ -17,6 +18,10 @@ public class Player {
 
         this.holes = new Hole[6];
         Arrays.fill(this.holes, new Hole());
+    }
+
+    public void sendGameBoard(Hole[] opponentHoles) {
+        this.capitalizer.sendData(new GameBoardData(this.holes, opponentHoles));
     }
 
 }

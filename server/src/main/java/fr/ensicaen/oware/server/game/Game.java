@@ -1,7 +1,6 @@
 package fr.ensicaen.oware.server.game;
 
 import fr.ensicaen.oware.server.Main;
-import fr.ensicaen.oware.server.packets.Packet;
 import fr.ensicaen.oware.server.packets.datas.ActionData;
 
 import java.util.Random;
@@ -26,7 +25,13 @@ public class Game {
     }
 
     public void nextRound() {
-        this.currentPlayer.getCapitalizer().sendPacket(new Packet(new ActionData(ActionData.Action.PLAY)));
+        this.sendGameBoardToClients();
+        this.currentPlayer.getCapitalizer().sendData(new ActionData(ActionData.Action.PLAY));
+    }
+
+    public void sendGameBoardToClients() {
+        this.fisrtPlayer.sendGameBoard(this.secondPlayer.getHoles());
+        this.secondPlayer.sendGameBoard(this.fisrtPlayer.getHoles());
     }
 
 }
