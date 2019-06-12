@@ -22,19 +22,14 @@ public class Capitalizer implements Runnable {
 
     @Override
     public void run() {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-            String serializedPacket = reader.readLine();
-            this.packetHandler.handle(serializedPacket);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error:" + this.socket);
-        } finally {
-            try {
-                this.socket.close();
-            } catch (IOException e) {
+        while (!this.socket.isClosed()) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()))) {
+                String serializedPacket = reader.readLine();
+                this.packetHandler.handle(serializedPacket);
+            } catch (Exception e) {
                 e.printStackTrace();
+                System.out.println("Error:" + this.socket);
             }
-            System.out.println("Closed: " + this.socket);
         }
     }
 

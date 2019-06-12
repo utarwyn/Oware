@@ -1,9 +1,11 @@
 package fr.ensicaen.oware.server.game;
 
 import fr.ensicaen.oware.server.sockets.Capitalizer;
+import lombok.Getter;
 
 import java.util.Arrays;
 
+@Getter
 public class Player {
 
     private Capitalizer capitalizer;

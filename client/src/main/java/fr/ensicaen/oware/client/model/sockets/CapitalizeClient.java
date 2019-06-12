@@ -3,6 +3,7 @@ package fr.ensicaen.oware.client.model.sockets;
 import fr.ensicaen.oware.client.applications.Main;
 import fr.ensicaen.oware.client.model.packets.Packet;
 import fr.ensicaen.oware.client.model.packets.PacketHandler;
+import lombok.Getter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+@Getter
 public class CapitalizeClient {
 
     private Main main;
@@ -35,11 +37,12 @@ public class CapitalizeClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-            this.packetHandler.handle(reader.readLine());
-            this.socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        while (!this.socket.isClosed()) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+                this.packetHandler.handle(reader.readLine());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

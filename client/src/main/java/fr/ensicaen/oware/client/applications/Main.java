@@ -3,6 +3,7 @@ package fr.ensicaen.oware.client.applications;
 import fr.ensicaen.oware.client.controllers.MainController;
 import fr.ensicaen.oware.client.model.sockets.CapitalizeClient;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -68,6 +69,15 @@ public class Main extends Application {
     private void buildStage() {
         this.stage.initStyle(StageStyle.TRANSPARENT);
         this.stage.setResizable(false);
+        this.stage.setOnCloseRequest(event -> {
+            try {
+                this.capitalizeClient.getSocket().close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
 }
