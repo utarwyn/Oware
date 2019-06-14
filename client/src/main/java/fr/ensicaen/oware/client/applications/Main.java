@@ -1,7 +1,7 @@
 package fr.ensicaen.oware.client.applications;
 
 import fr.ensicaen.oware.client.controllers.MainController;
-import fr.ensicaen.oware.client.model.sockets.CapitalizeClient;
+import fr.ensicaen.oware.client.net.CapitalizeClient;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
