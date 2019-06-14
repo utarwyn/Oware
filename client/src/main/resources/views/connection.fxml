@@ -2,15 +2,15 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ensicaen.oware.client.controllers.ConnectionController"
-      maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-      prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121">
-    <children>
-        <Label text="Connection"/>
-        <Label text="Hostname"/>
-        <TextField fx:id="hostnameTextField" text="localhost"/>
-        <Label text="Port"/>
-        <TextField fx:id="portTextField" text="59898"/>
-        <Button onAction="#onConnectButtonClick" mnemonicParsing="false" text="Connect"/>
-    </children>
+      maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+      prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.121">
+    <Label text="Connection"/>
+    <Label text="Hostname"/>
+    <TextField fx:id="hostnameTextField" text="localhost"/>
+    <Label text="Port"/>
+    <TextField fx:id="portTextField" text="59898"/>
+    <Button onAction="#onConnectButtonClick" mnemonicParsing="false" text="Connect"/>
+    <Text fx:id="errorMessage" text="Coucou le monde!" style="-fx-fill:red" visible="false"/>
 </VBox>

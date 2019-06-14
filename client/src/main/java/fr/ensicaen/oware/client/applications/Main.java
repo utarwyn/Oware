@@ -16,68 +16,58 @@ import java.io.IOException;
 @Getter
 public class Main extends Application {
 
-    private Parent root;
+	private Parent root;
 
-    private Stage stage;
+	private Stage stage;
 
-    private Scene scene;
+	private Scene scene;
 
-    private MainController mainController;
+	private MainController mainController;
 
-    private String hostname;
+	private CapitalizeClient capitalizeClient;
 
-    private int port;
+	public Main(String hostname, int port) {
+		this.capitalizeClient = new CapitalizeClient(this, hostname, port);
+	}
 
-    private CapitalizeClient capitalizeClient;
+	@Override
+	public void start(Stage primaryStage) throws IOException {
+		this.stage = primaryStage;
+		this.buildRoot();
+		primaryStage.setTitle("Oware");
+		this.buildStage();
+		this.buildScene();
+		this.stage.show();
+	}
 
-    public Main(String hostname, int port) {
-        this.hostname = hostname;
-        this.port = port;
-    }
+	private void buildRoot() throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(Main.class.getResource("/views/main.fxml"));
+		this.root = loader.load();
+		this.mainController = loader.getController();
+		this.mainController.setMain(this);
+		this.mainController.createWindowMover();
+	}
 
-    @Override
-    public void start(Stage primaryStage) throws IOException {
-        this.stage = primaryStage;
-        this.buildRoot();
-        primaryStage.setTitle("Oware");
-        this.buildStage();
-        this.buildScene();
-        this.stage.show();
+	private void buildScene() {
+		this.scene = new Scene(root, 490, 490);
+		this.scene.setFill(null);
+		this.stage.setResizable(false);
+		this.stage.setScene(this.scene);
+	}
 
-        (new Thread(() -> {
-            this.capitalizeClient = new CapitalizeClient(this, this.hostname, this.port);
-            capitalizeClient.connectToServer();
-        })).start();
-    }
-
-    private void buildRoot() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("/views/main.fxml"));
-        this.root = loader.load();
-        this.mainController = loader.getController();
-        this.mainController.setMain(this);
-        this.mainController.createWindowMover();
-    }
-
-    private void buildScene() {
-        this.scene = new Scene(root, 490, 490);
-        this.scene.setFill(null);
-        this.stage.setResizable(false);
-        this.stage.setScene(this.scene);
-    }
-
-    private void buildStage() {
-        this.stage.initStyle(StageStyle.TRANSPARENT);
-        this.stage.setResizable(false);
-        this.stage.setOnCloseRequest(event -> {
-            try {
-                this.capitalizeClient.getSocket().close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Platform.exit();
-            System.exit(0);
-        });
-    }
+	private void buildStage() {
+		this.stage.initStyle(StageStyle.TRANSPARENT);
+		this.stage.setResizable(false);
+		this.stage.setOnCloseRequest(event -> {
+			try {
+				this.capitalizeClient.getSocket().close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			Platform.exit();
+			System.exit(0);
+		});
+	}
 
 }

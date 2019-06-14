@@ -5,16 +5,21 @@ import fr.ensicaen.oware.client.model.packets.Packet;
 import fr.ensicaen.oware.client.model.packets.PacketHandler;
 import lombok.Getter;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * This class creates a link between this client and the Oware server.
+ * It is used to send and receive packets from the server.
+ *
+ * @author Maxime Malgorn <maxime.malgorn@ecole.ensicaen.fr>
+ * @author Pierre Poulain <pierre.poulain@ecole.ensicaen.fr>
+ */
 @Getter
 public class CapitalizeClient {
 
-    private Main main;
+	private Main main;
 
     private String host;
 
@@ -25,32 +30,29 @@ public class CapitalizeClient {
     private PacketHandler packetHandler;
 
     public CapitalizeClient(Main main, String host, int port) {
-        this.main = main;
+    	this.main = main;
         this.host = host;
         this.port = port;
-        this.packetHandler = new PacketHandler(this.main);
     }
 
-    public void connectToServer() {
-        try {
-            this.socket = new Socket(this.host, this.port);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        while (!this.socket.isClosed()) {
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-                this.packetHandler.handle(reader.readLine());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+	/**
+	 * Try to connect to the server and create the packet handler.
+	 * @throws IOException Throwed if the client cannot connect to the server.
+	 */
+	public void connectToServer() throws IOException {
+        this.socket = new Socket(this.host, this.port);
+        this.packetHandler = new PacketHandler(this.socket, this.main);
+        this.packetHandler.start();
     }
 
-    public void sendPacket(Packet packet) {
+	/**
+	 * Send a packet through network to the Oware server.
+	 * @param packet Packet to send to the server.
+	 * @throws IOException Throwed if the packet cannot be transmited to the server.
+	 */
+	public void sendPacket(Packet packet) throws IOException {
         try (PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true)) {
             out.println(packet.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
