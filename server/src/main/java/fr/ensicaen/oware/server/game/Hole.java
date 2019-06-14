@@ -5,11 +5,11 @@ import lombok.Getter;
 @Getter
 public class Hole {
 
-    private static final int DEFAULT_SEEDS = 4;
+	private static final int DEFAULT_SEEDS = 4;
 
-    private int seeds;
+	private int seeds;
 
-    public Hole() {
-        this.seeds = DEFAULT_SEEDS;
-    }
+	public Hole() {
+		this.seeds = DEFAULT_SEEDS;
+	}
 }

@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class GameBoard {
 
-    private Hole[] playerHoles;
-    private Hole[] opponentHoles;
+	private Hole[] playerHoles;
+	private Hole[] opponentHoles;
 
 }

@@ -74,6 +74,7 @@ public class ConnectionController {
 
 	/**
 	 * Show an error message in the error label.
+	 *
 	 * @param message Message to display
 	 */
 	private void showErrorMessage(String message) {

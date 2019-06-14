@@ -1,37 +1,47 @@
 package fr.ensicaen.oware.server.game;
 
 import fr.ensicaen.oware.server.Main;
-import fr.ensicaen.oware.server.packets.datas.ActionData;
+import fr.ensicaen.oware.server.net.packets.PlayPacket;
+import fr.ensicaen.oware.server.net.packets.UpdateGameBoardPacket;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class Game {
 
-    private Main main;
+	private Main main;
 
-    private Player fisrtPlayer;
+	private Player firstPlayer;
 
-    private Player secondPlayer;
+	private Player secondPlayer;
 
-    private Player currentPlayer;
+	private Player currentPlayer;
 
-    public Game(Main main) {
-        this.main = main;
-        System.out.println("Game started!");
-        this.fisrtPlayer = new Player(this.main.getCapitalizeServer().getFirstClient());
-        this.secondPlayer = new Player(this.main.getCapitalizeServer().getSecondClient());
-        this.currentPlayer = new Random().nextInt() > 0.5 ? this.fisrtPlayer : this.secondPlayer;
-        this.nextRound();
-    }
+	public Game(Main main) {
+		this.main = main;
+		System.out.println("Game started!");
+		this.firstPlayer = new Player(this.main.getCapitalizeServer().getFirstClient());
+		this.secondPlayer = new Player(this.main.getCapitalizeServer().getSecondClient());
+		this.currentPlayer = new Random().nextInt() > 0.5 ? this.firstPlayer : this.secondPlayer;
+	}
 
-    public void nextRound() {
-        this.sendGameBoardToClients();
-        this.currentPlayer.getCapitalizer().sendData(new ActionData(ActionData.Action.PLAY));
-    }
+	public List<Hole> getGameBoard() {
+		List<Hole> holes = new ArrayList<>(Arrays.asList(this.firstPlayer.getHoles()));
+		holes.addAll(Arrays.asList(this.secondPlayer.getHoles()));
+		return holes;
+	}
 
-    public void sendGameBoardToClients() {
-        this.fisrtPlayer.sendGameBoard(this.secondPlayer.getHoles());
-        this.secondPlayer.sendGameBoard(this.fisrtPlayer.getHoles());
-    }
+	public void nextRound() {
+		// Changing current player
+		this.currentPlayer = this.currentPlayer == this.firstPlayer ? this.secondPlayer : this.firstPlayer;
+
+		// Send the gameboard to players
+		this.main.getCapitalizeServer().broadcastPacket(new UpdateGameBoardPacket(this.getGameBoard()));
+
+		// And send the play packet to the current player
+		this.currentPlayer.getCapitalizer().sendPacket(new PlayPacket());
+	}
 
 }

@@ -9,14 +9,14 @@ import lombok.Setter;
 @Getter
 public class MainController {
 
-    @Setter
-    private Main main;
+	@Setter
+	private Main main;
 
-    @FXML
-    private Pane mainPanel;
+	@FXML
+	private Pane mainPanel;
 
-    public void createWindowMover() {
-        new WindowMover(this.main.getStage(), this.mainPanel);
-    }
+	public void createWindowMover() {
+		new WindowMover(this.main.getStage(), this.mainPanel);
+	}
 
 }
