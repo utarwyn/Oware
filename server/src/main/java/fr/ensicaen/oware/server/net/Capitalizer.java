@@ -39,7 +39,7 @@ public class Capitalizer extends Thread {
 				this.handlePacket(inputLine);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Client disconnected!");
 		}
 
 		this.outStream.close();

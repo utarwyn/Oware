@@ -1,20 +1,22 @@
 package fr.ensicaen.oware.client.controllers;
 
-import fr.ensicaen.oware.client.applications.Connection;
-import fr.ensicaen.oware.client.applications.Main;
+import fr.ensicaen.oware.client.stages.GameStage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-@Getter
-public class ConnectionController {
+/**
+ * Represents the menu controller.
+ * Used by the stage {@link fr.ensicaen.oware.client.stages.MenuStage}.
+ *
+ * @author Maxime Malgorn <maxime.malgorn@ecole.ensicaen.fr>
+ * @author Pierre Poulain <pierre.poulain@ecole.ensicaen.fr>
+ */
+public class MenuController extends Controller {
 
 	/**
 	 * Regex to validate if a string represents an hostname.
@@ -26,9 +28,6 @@ public class ConnectionController {
 	 */
 	private static final Pattern REGEX_PORT = Pattern.compile("^[0-9]{1,5}$");
 
-	@Setter
-	private Connection connection;
-
 	@FXML
 	private TextField hostnameTextField;
 
@@ -38,6 +37,14 @@ public class ConnectionController {
 	@FXML
 	private Text errorMessage;
 
+	@Override
+	public void initialize() {
+		// Nothing to initialize here
+	}
+
+	/**
+	 * Called when the button for connecting is clicked.
+	 */
 	public void onConnectButtonClick() {
 		String hostname = this.hostnameTextField.getText();
 		String port = this.portTextField.getText();
@@ -63,13 +70,16 @@ public class ConnectionController {
 		}
 	}
 
+	/**
+	 * Try to connect to a specific server.
+	 *
+	 * @param hostname Server host to connect to
+	 * @param port Server port to connect to
+	 * @throws IOException Throwed if the client cannot connect to the server.
+	 */
 	private void tryToConnect(String hostname, int port) throws IOException {
-		Main main = new Main(hostname, port);
-		main.getCapitalizeClient().connectToServer();
-
-		// Now changing stage to display the board game!
-		this.connection.getStage().close();
-		main.start(new Stage());
+		this.application.getClient().connectToServer(hostname, port);
+		this.application.displayStage(new GameStage());
 	}
 
 	/**
@@ -81,4 +91,5 @@ public class ConnectionController {
 		this.errorMessage.setText(message);
 		this.errorMessage.setVisible(true);
 	}
+
 }

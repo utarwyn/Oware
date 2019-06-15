@@ -2,7 +2,7 @@ package fr.ensicaen.oware.client.net;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import fr.ensicaen.oware.client.applications.Main;
+import fr.ensicaen.oware.client.OwareApp;
 import lombok.Getter;
 
 import java.io.BufferedReader;
@@ -21,31 +21,44 @@ import java.net.Socket;
 @Getter
 public class CapitalizeClient extends Thread {
 
+	/**
+	 * The Gson object to serialize/deserialize packets
+	 */
 	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(Packet.class, new PacketTypeAdapter()).create();
 
-	private Main main;
+	/**
+	 * The Oware application
+	 */
+	private OwareApp application;
 
-	private String host;
-
-	private int port;
-
+	/**
+	 * Socket connection to the Oware server
+	 */
 	private Socket socket;
 
+	/**
+	 * Output stream in whichs packets are wrote
+	 */
 	private PrintWriter outStream;
 
-	public CapitalizeClient(Main main, String host, int port) {
-		this.main = main;
-		this.host = host;
-		this.port = port;
+	/**
+	 * Construct a new client to interact with the Oware server.
+	 *
+	 * @param application Main object of the client
+	 */
+	public CapitalizeClient(OwareApp application) {
+		this.application = application;
 	}
 
 	/**
 	 * Try to connect to the server and create the packet handler.
 	 *
+	 * @param host Server host to connect to
+	 * @param port Server port to connect to
 	 * @throws IOException Throwed if the client cannot connect to the server.
 	 */
-	public void connectToServer() throws IOException {
-		this.socket = new Socket(this.host, this.port);
+	public void connectToServer(String host, int port) throws IOException {
+		this.socket = new Socket(host, port);
 		this.outStream = new PrintWriter(this.socket.getOutputStream(), true);
 		this.start();
 	}
@@ -79,12 +92,13 @@ public class CapitalizeClient extends Thread {
 
 	/**
 	 * Handle a specific packet from the server.
+	 *
 	 * @param serializedPacket Serialized packet received from the server.
 	 */
 	private void handlePacket(String serializedPacket) {
 		Packet packet = GSON.fromJson(serializedPacket, Packet.class);
 		if (packet != null) {
-			packet.setMain(this.main);
+			packet.setApplication(this.application);
 			packet.onReceive();
 		}
 	}

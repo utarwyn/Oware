@@ -3,9 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ensicaen.oware.client.controllers.ConnectionController"
-      maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-      prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.121">
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ensicaen.oware.client.controllers.MenuController"
+      maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500"
+      prefWidth="600" xmlns="http://javafx.com/javafx/8.0.121">
     <Label text="Connection"/>
     <Label text="Hostname"/>
     <TextField fx:id="hostnameTextField" text="localhost"/>
