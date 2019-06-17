@@ -3,7 +3,6 @@ package fr.ensicaen.oware.client.controllers;
 import fr.ensicaen.oware.client.stages.GameStage;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -67,11 +66,7 @@ public class MenuController extends Controller {
                 try {
                     this.tryToConnect(hostname, Integer.parseInt(port));
                 } catch (IOException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Connection error!");
-                    alert.setHeaderText("Connection error!");
-                    alert.setContentText("We cannot connect you to the server.");
-                    alert.showAndWait();
+                    this.showErrorMessage("Cannot connect to the server. Please retry.");
                 }
             } else {
                 this.showErrorMessage("The port seems to be incorrect.");

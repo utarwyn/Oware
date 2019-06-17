@@ -4,6 +4,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 <Pane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx"
@@ -20,7 +21,9 @@
     <Button onAction="#onConnectButtonClick" mnemonicParsing="false" styleClass="button" text="Start the game!"
             layoutX="30" layoutY="310" prefWidth="230" prefHeight="30"/>
 
-    <Text fx:id="errorMessage" text="Coucou le monde!" style="-fx-fill:red" visible="false"/>
+    <HBox alignment="CENTER" layoutX="30" layoutY="340" prefWidth="230" prefHeight="40">
+        <Text fx:id="errorMessage" styleClass="errorMessage" visible="false"/>
+    </HBox>
     <Text fx:id="copyright" text="Version ${version}&#13;Maxime Malgorn, Pierre Poulain" styleClass="copyright"
           textAlignment="RIGHT" layoutY="420" layoutX="500"/>
 
