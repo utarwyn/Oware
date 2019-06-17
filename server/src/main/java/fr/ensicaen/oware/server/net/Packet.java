@@ -6,12 +6,12 @@ import lombok.Setter;
 
 public abstract class Packet {
 
-	@Getter
-	@Setter
-	protected transient Main main;
+    @Getter
+    @Setter
+    protected transient Main main;
 
-	public void onReceive() {
+    public void onReceive() {
 
-	}
+    }
 
 }

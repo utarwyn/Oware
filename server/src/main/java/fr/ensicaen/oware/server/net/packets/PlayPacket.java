@@ -5,5 +5,4 @@ import fr.ensicaen.oware.server.net.Packet;
 public class PlayPacket extends Packet {
 
 
-
 }

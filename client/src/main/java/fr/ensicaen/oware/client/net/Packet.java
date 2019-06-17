@@ -14,20 +14,20 @@ import lombok.Setter;
  */
 public abstract class Packet {
 
-	/**
-	 * The Oware application. Can be used by the onReceive method.
-	 * It has the transient modifier because we don't want it in the serialization.
-	 */
-	@Getter
-	@Setter
-	protected transient OwareApp application;
+    /**
+     * The Oware application. Can be used by the onReceive method.
+     * It has the transient modifier because we don't want it in the serialization.
+     */
+    @Getter
+    @Setter
+    protected transient OwareApp application;
 
-	/**
-	 * Method which can be implemented (or not) by each packet.
-	 * Called when the packet is received from the server.
-	 */
-	public void onReceive() {
-		// Not implemented
-	}
+    /**
+     * Method which can be implemented (or not) by each packet.
+     * Called when the packet is received from the server.
+     */
+    public void onReceive() {
+        // Not implemented
+    }
 
 }

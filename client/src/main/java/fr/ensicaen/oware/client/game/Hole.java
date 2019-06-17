@@ -5,6 +5,6 @@ import lombok.Getter;
 @Getter
 public class Hole {
 
-	private int seeds;
+    private int seeds;
 
 }

@@ -14,44 +14,44 @@ import java.io.IOException;
  */
 public class GameController extends Controller {
 
-	/**
-	 * Offset X of the window
-	 */
-	private double xOffset;
+    /**
+     * Offset X of the window
+     */
+    private double xOffset;
 
-	/**
-	 * Offset Y of the window
-	 */
-	private double yOffset;
+    /**
+     * Offset Y of the window
+     */
+    private double yOffset;
 
-	@FXML
-	private Pane mainPanel;
+    @FXML
+    private Pane mainPanel;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void initialize() {
-		this.xOffset = 0;
-		this.yOffset = 0;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void initialize() {
+        this.xOffset = 0;
+        this.yOffset = 0;
 
-		this.mainPanel.setOnMousePressed(event -> {
-			xOffset = this.stage.getX() - event.getScreenX();
-			yOffset = this.stage.getY() - event.getScreenY();
-		});
-		this.mainPanel.setOnMouseDragged(event -> {
-			this.stage.setX(event.getScreenX() + xOffset);
-			this.stage.setY(event.getScreenY() + yOffset);
-		});
-	}
+        this.mainPanel.setOnMousePressed(event -> {
+            xOffset = this.stage.getX() - event.getScreenX();
+            yOffset = this.stage.getY() - event.getScreenY();
+        });
+        this.mainPanel.setOnMouseDragged(event -> {
+            this.stage.setX(event.getScreenX() + xOffset);
+            this.stage.setY(event.getScreenY() + yOffset);
+        });
+    }
 
-	/**
-	 * Close the socket to communicate with the server.
-	 *
-	 * @throws IOException Throwed if the connection cannot be closed.
-	 */
-	public void closeClientSocket() throws IOException {
-		this.application.getClient().getSocket().close();
-	}
+    /**
+     * Close the socket to communicate with the server.
+     *
+     * @throws IOException Throwed if the connection cannot be closed.
+     */
+    public void closeClientSocket() throws IOException {
+        this.application.getClient().getSocket().close();
+    }
 
 }

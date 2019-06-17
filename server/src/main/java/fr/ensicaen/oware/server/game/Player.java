@@ -8,15 +8,15 @@ import java.util.Arrays;
 @Getter
 public class Player {
 
-	private Capitalizer capitalizer;
+    private Capitalizer capitalizer;
 
-	private Hole[] holes;
+    private Hole[] holes;
 
-	public Player(Capitalizer capitalizer) {
-		this.capitalizer = capitalizer;
+    public Player(Capitalizer capitalizer) {
+        this.capitalizer = capitalizer;
 
-		this.holes = new Hole[6];
-		Arrays.fill(this.holes, new Hole());
-	}
+        this.holes = new Hole[6];
+        Arrays.fill(this.holes, new Hole());
+    }
 
 }

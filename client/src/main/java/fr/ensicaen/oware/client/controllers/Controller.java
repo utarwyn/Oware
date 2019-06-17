@@ -14,19 +14,19 @@ import lombok.Setter;
 @Setter
 public abstract class Controller {
 
-	/**
-	 * The custom stage which uses this controller
-	 */
-	OwareStage stage;
+    /**
+     * The custom stage which uses this controller
+     */
+    OwareStage stage;
 
-	/**
-	 * The Oware application
-	 */
-	OwareApp application;
+    /**
+     * The Oware application
+     */
+    OwareApp application;
 
-	/**
-	 * Called when the controller is initializing from the stage.
-	 */
-	public abstract void initialize();
+    /**
+     * Called when the controller is initializing from the stage.
+     */
+    public abstract void initialize();
 
 }

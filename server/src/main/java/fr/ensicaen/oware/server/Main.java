@@ -8,18 +8,18 @@ import lombok.Setter;
 @Getter
 public class Main {
 
-	@Setter
-	private Game game;
+    @Setter
+    private Game game;
 
-	private CapitalizeServer capitalizeServer;
+    private CapitalizeServer capitalizeServer;
 
-	public Main() {
-		this.capitalizeServer = new CapitalizeServer(this, 59898);
-		this.capitalizeServer.listen();
-	}
+    public Main() {
+        this.capitalizeServer = new CapitalizeServer(this, 59898);
+        this.capitalizeServer.listen();
+    }
 
-	public static void main(String[] args) {
-		new Main();
-	}
+    public static void main(String[] args) {
+        new Main();
+    }
 
 }

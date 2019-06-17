@@ -7,10 +7,10 @@ import java.util.List;
 
 public class UpdateGameBoardPacket extends Packet {
 
-	private List<Hole> gameboard;
+    private List<Hole> gameboard;
 
-	public UpdateGameBoardPacket(List<Hole> gameboard) {
-		this.gameboard = gameboard;
-	}
+    public UpdateGameBoardPacket(List<Hole> gameboard) {
+        this.gameboard = gameboard;
+    }
 
 }

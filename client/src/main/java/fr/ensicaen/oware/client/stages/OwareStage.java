@@ -18,63 +18,63 @@ import java.io.IOException;
  */
 public abstract class OwareStage extends Stage {
 
-	/**
-	 * Linked FXML view file
-	 */
-	private String fxmlFile;
+    /**
+     * Linked FXML view file
+     */
+    private String fxmlFile;
 
-	/**
-	 * Controller linked with the stage and the view ("fx:controller" attribute)
-	 */
-	private Controller controller;
+    /**
+     * Controller linked with the stage and the view ("fx:controller" attribute)
+     */
+    private Controller controller;
 
-	/**
-	 * Construct a custom stage for the Oware application.
-	 *
-	 * @param fxmlFile FXML view file to load
-	 * @param title    Title to display in the window bar
-	 */
-	OwareStage(String fxmlFile, String title) {
-		this.fxmlFile = fxmlFile;
-		this.setTitle(title);
-	}
+    /**
+     * Construct a custom stage for the Oware application.
+     *
+     * @param fxmlFile FXML view file to load
+     * @param title    Title to display in the window bar
+     */
+    OwareStage(String fxmlFile, String title) {
+        this.fxmlFile = fxmlFile;
+        this.setTitle(title);
+    }
 
-	/**
-	 * Return the stored controller with a generic type.
-	 *
-	 * @param <T> Generic type of the controller. Must extends the Oware controller class.
-	 * @return The controller with the choosen type.
-	 */
-	<T extends Controller> T getController() {
-		return (T) this.controller;
-	}
+    /**
+     * Return the stored controller with a generic type.
+     *
+     * @param <T> Generic type of the controller. Must extends the Oware controller class.
+     * @return The controller with the choosen type.
+     */
+    <T extends Controller> T getController() {
+        return (T) this.controller;
+    }
 
-	/**
-	 * Start the stage and display it for the user.
-	 *
-	 * @param application The Oware application. Used to load the controller.
-	 * @throws IOException throwed if the stage cannot be loaded from the view file.
-	 */
-	public void start(OwareApp application) throws IOException {
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(GameStage.class.getResource("/views/" + this.fxmlFile));
-		Parent root = loader.load();
+    /**
+     * Start the stage and display it for the user.
+     *
+     * @param application The Oware application. Used to load the controller.
+     * @throws IOException throwed if the stage cannot be loaded from the view file.
+     */
+    public void start(OwareApp application) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(GameStage.class.getResource("/views/" + this.fxmlFile));
+        Parent root = loader.load();
 
-		this.controller = loader.getController();
-		this.controller.setApplication(application);
-		this.controller.setStage(this);
-		this.controller.initialize();
+        this.controller = loader.getController();
+        this.controller.setApplication(application);
+        this.controller.setStage(this);
+        this.controller.initialize();
 
-		this.setScene(new Scene(root));
-		this.setup();
-		this.show();
-	}
+        this.setScene(new Scene(root));
+        this.setup();
+        this.show();
+    }
 
-	/**
-	 * Called when the stage is setting up (before the display).
-	 */
-	public void setup() {
-		// Not implemented
-	}
+    /**
+     * Called when the stage is setting up (before the display).
+     */
+    public void setup() {
+        // Not implemented
+    }
 
 }

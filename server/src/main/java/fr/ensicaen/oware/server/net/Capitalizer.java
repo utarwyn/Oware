@@ -12,53 +12,54 @@ import java.net.Socket;
 
 public class Capitalizer extends Thread {
 
-	private static final Gson GSON = new GsonBuilder().registerTypeAdapter(Packet.class, new PacketTypeAdapter()).create();
+    private static final Gson GSON = new GsonBuilder().registerTypeAdapter(Packet.class, new PacketTypeAdapter()).create();
 
-	private Main main;
+    private Main main;
 
-	private Socket socket;
+    private Socket socket;
 
-	private PrintWriter outStream;
+    private PrintWriter outStream;
 
-	Capitalizer(Main main, Socket socket) {
-		this.socket = socket;
-		this.main = main;
-	}
+    Capitalizer(Main main, Socket socket) {
+        this.socket = socket;
+        this.main = main;
+    }
 
-	void initialize() throws IOException {
-		this.outStream = new PrintWriter(this.socket.getOutputStream(), true);
-		this.start();
-	}
+    void initialize() throws IOException {
+        this.outStream = new PrintWriter(this.socket.getOutputStream(), true);
+        this.start();
+    }
 
-	@Override
-	public void run() {
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-			String inputLine;
+    @Override
+    public void run() {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+            String inputLine;
 
-			while ((inputLine = reader.readLine()) != null) {
-				this.handlePacket(inputLine);
-			}
-		} catch (Exception e) {
-			System.out.println("Client disconnected!");
-		}
+            while ((inputLine = reader.readLine()) != null) {
+                this.handlePacket(inputLine);
+            }
+        } catch (Exception e) {
+            System.out.println("Client disconnected!");
+        }
 
-		this.outStream.close();
-	}
+        this.outStream.close();
+    }
 
-	public void sendPacket(Packet packet) {
-		this.outStream.println(GSON.toJson(packet, Packet.class));
-	}
+    public void sendPacket(Packet packet) {
+        this.outStream.println(GSON.toJson(packet, Packet.class));
+    }
 
-	/**
-	 * Handle a specific packet from a client.
-	 * @param seralizedPacket Serialized packet received from a client.
-	 */
-	private void handlePacket(String seralizedPacket) {
-		Packet packet = GSON.fromJson(seralizedPacket, Packet.class);
-		if (packet != null) {
-			packet.setMain(this.main);
-			packet.onReceive();
-		}
-	}
+    /**
+     * Handle a specific packet from a client.
+     *
+     * @param seralizedPacket Serialized packet received from a client.
+     */
+    private void handlePacket(String seralizedPacket) {
+        Packet packet = GSON.fromJson(seralizedPacket, Packet.class);
+        if (packet != null) {
+            packet.setMain(this.main);
+            packet.onReceive();
+        }
+    }
 
 }
