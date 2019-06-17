@@ -2,6 +2,7 @@ allprojects {
     apply plugin: 'application'
     apply plugin: 'java'
 
+    version = '1.0.0'
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
     compileJava.options.encoding = 'UTF-8'
@@ -40,6 +41,7 @@ project('client') {
         manifest {
             attributes(
                     'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                    'Implementation-Version': version,
                     'Main-Class': mainClassName
             )
         }
@@ -57,6 +59,7 @@ project('server') {
         manifest {
             attributes(
                     'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                    'Implementation-Version': version,
                     'Main-Class': mainClassName
             )
         }

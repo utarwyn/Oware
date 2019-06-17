@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ensicaen.oware.client.controllers.MenuController"
-      maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500"
-      prefWidth="600" xmlns="http://javafx.com/javafx/8.0.121">
-    <Label text="Connection"/>
-    <Label text="Hostname"/>
-    <TextField fx:id="hostnameTextField" text="localhost"/>
-    <Label text="Port"/>
-    <TextField fx:id="portTextField" text="59898"/>
-    <Button onAction="#onConnectButtonClick" mnemonicParsing="false" text="Connect"/>
+<Pane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx"
+      fx:controller="fr.ensicaen.oware.client.controllers.MenuController" prefHeight="450" prefWidth="700"
+      stylesheets="@../styles/menu.css">
+    <ImageView fitHeight="450" fitWidth="700" pickOnBounds="true" preserveRatio="true">
+        <Image url="@../images/menu.jpg"/>
+    </ImageView>
+
+    <TextField fx:id="hostnameTextField" styleClass="input" text="localhost" promptText="Server hostname"
+               layoutX="30" layoutY="210" prefWidth="230" prefHeight="30"/>
+    <TextField fx:id="portTextField" styleClass="input" text="59898" promptText="Server port"
+               layoutX="30" layoutY="250" prefWidth="230" prefHeight="30"/>
+    <Button onAction="#onConnectButtonClick" mnemonicParsing="false" styleClass="button" text="Start the game!"
+            layoutX="30" layoutY="310" prefWidth="230" prefHeight="30"/>
+
     <Text fx:id="errorMessage" text="Coucou le monde!" style="-fx-fill:red" visible="false"/>
-</VBox>
+    <Text fx:id="copyright" text="Version ${version}&#13;Maxime Malgorn, Pierre Poulain" styleClass="copyright"
+          textAlignment="RIGHT" layoutY="420" layoutX="500"/>
+
+    <Button onAction="#onCloseButtonClick" mnemonicParsing="false" styleClass="close-button"
+            layoutX="665" layoutY="10" text="X"/>
+</Pane>

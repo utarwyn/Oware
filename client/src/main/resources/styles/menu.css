@@ -1,0 +1,35 @@
+.input {
+    -fx-background-color: #eeeeee;
+}
+
+.input:focused {
+    -fx-background-color: #dddddd;
+}
+
+.button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-size: 1.3em;
+    -fx-font-weight: bold;
+}
+
+.button:hover, .button:focused {
+    -fx-background-color: #2980b9;
+}
+
+.copyright {
+    -fx-fill: #dddddd;
+    -fx-font-size: 13px;
+}
+
+.close-button {
+    -fx-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-color: #f64907;
+    -fx-background-radius: 0;
+}
+
+.close-button:hover, .close-button:focused {
+    -fx-background-color: #cc3d07;
+}

@@ -71,4 +71,15 @@ public class OwareApp extends Application {
 		this.displayStage(new MenuStage());
 	}
 
+	/**
+	 * Return the version of the application from its Manifest.
+	 * Can be filled only when application is called from its Jar.
+	 *
+	 * @return Version of the application
+	 */
+	public String getVersion() {
+		String version = getClass().getPackage().getImplementationVersion();
+		return version != null ? version : "dév.";
+	}
+
 }

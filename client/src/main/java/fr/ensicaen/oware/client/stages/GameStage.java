@@ -41,7 +41,6 @@ public class GameStage extends OwareStage {
 		});
 
 		getScene().setFill(null);
-		this.setResizable(false);
 	}
 
 }

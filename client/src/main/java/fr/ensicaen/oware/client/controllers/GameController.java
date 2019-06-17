@@ -31,7 +31,7 @@ public class GameController extends Controller {
      * {@inheritDoc}
      */
     @Override
-    public void initialize() {
+    public void load() {
         this.xOffset = 0;
         this.yOffset = 0;
 

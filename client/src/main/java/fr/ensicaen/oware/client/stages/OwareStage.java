@@ -1,10 +1,12 @@
 package fr.ensicaen.oware.client.stages;
 
+import com.google.gson.internal.GsonBuildConfig;
 import fr.ensicaen.oware.client.OwareApp;
 import fr.ensicaen.oware.client.controllers.Controller;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,6 +19,11 @@ import java.io.IOException;
  * @author Pierre Poulain <pierre.poulain@ecole.ensicaen.fr>
  */
 public abstract class OwareStage extends Stage {
+
+    /**
+     * The application favicon image
+     */
+    private static final Image FAVICON = new Image(OwareStage.class.getResourceAsStream("/images/favicon.png"));
 
     /**
      * Linked FXML view file
@@ -63,7 +70,12 @@ public abstract class OwareStage extends Stage {
         this.controller = loader.getController();
         this.controller.setApplication(application);
         this.controller.setStage(this);
-        this.controller.initialize();
+        this.controller.load();
+
+        // Apply the Oware favicon if needed
+        if (this.getIcons().isEmpty()) {
+            this.getIcons().add(FAVICON);
+        }
 
         this.setScene(new Scene(root));
         this.setup();

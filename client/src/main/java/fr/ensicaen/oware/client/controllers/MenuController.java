@@ -1,6 +1,7 @@
 package fr.ensicaen.oware.client.controllers;
 
 import fr.ensicaen.oware.client.stages.GameStage;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
@@ -37,9 +38,12 @@ public class MenuController extends Controller {
     @FXML
     private Text errorMessage;
 
+    @FXML
+    private Text copyright;
+
     @Override
-    public void initialize() {
-        // Nothing to initialize here
+    public void load() {
+        this.copyright.setText(this.copyright.getText().replace("${version}", this.application.getVersion()));
     }
 
     /**
@@ -68,6 +72,15 @@ public class MenuController extends Controller {
         } else {
             this.showErrorMessage("The hostname seems to be incorrect.");
         }
+    }
+
+    /**
+     * Called when the button for closing the menu is clicked.
+     */
+    public void onCloseButtonClick() {
+        this.stage.close();
+        Platform.exit();
+        System.exit(0);
     }
 
     /**

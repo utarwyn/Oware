@@ -27,6 +27,6 @@ public abstract class Controller {
     /**
      * Called when the controller is initializing from the stage.
      */
-    public abstract void initialize();
+    public abstract void load();
 
 }
