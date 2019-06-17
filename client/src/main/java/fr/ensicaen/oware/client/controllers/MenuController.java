@@ -5,6 +5,8 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -43,7 +45,12 @@ public class MenuController extends Controller {
 
     @Override
     public void load() {
+        // Update version in the copyright component
         this.copyright.setText(this.copyright.getText().replace("${version}", this.application.getVersion()));
+
+        // Send the form when key enter is pressed in hostname/port fields
+        this.hostnameTextField.setOnKeyPressed(this::onFieldKeyPressed);
+        this.portTextField.setOnKeyPressed(this::onFieldKeyPressed);
     }
 
     /**
@@ -81,6 +88,17 @@ public class MenuController extends Controller {
         this.stage.close();
         Platform.exit();
         System.exit(0);
+    }
+
+    /**
+     * Method called when a key is pressed when focusing an input field.
+     *
+     * @param event Key Event fired by JavaFX
+     */
+    private void onFieldKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            this.onConnectButtonClick();
+        }
     }
 
     /**
