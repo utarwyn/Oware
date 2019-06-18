@@ -21,11 +21,11 @@
     <Button onAction="#onConnectButtonClick" mnemonicParsing="false" styleClass="button" text="Start the game!"
             layoutX="30" layoutY="310" prefWidth="230" prefHeight="30"/>
 
-    <HBox alignment="CENTER" layoutX="30" layoutY="340" prefWidth="230" prefHeight="40">
-        <Text fx:id="errorMessage" styleClass="errorMessage" visible="false"/>
+    <HBox alignment="CENTER" layoutX="30" layoutY="345" prefWidth="230" prefHeight="40">
+        <Text fx:id="errorMessage" styleClass="errorMessage" visible="false" wrappingWidth="230"/>
     </HBox>
     <Text fx:id="copyright" text="Version ${version}&#13;Maxime Malgorn, Pierre Poulain" styleClass="copyright"
-          textAlignment="RIGHT" layoutY="420" layoutX="500"/>
+          textAlignment="RIGHT" layoutY="420" layoutX="495"/>
 
     <Button onAction="#onCloseButtonClick" mnemonicParsing="false" styleClass="close-button"
             layoutX="665" layoutY="10" text="X"/>

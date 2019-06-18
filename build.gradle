@@ -28,7 +28,7 @@ allprojects {
                 srcDirs = ["src/main/java", "src/main/resources"]
 
                 // Required to add fxml and xml to the jar
-                includes = ["**/*.fxml", "**/*.xml", "**/*.css", "**/*.png", "**/*.jpg"]
+                includes = ["**/*.fxml", "**/*.xml", "**/*.css", "**/*.ttf", "**/*.png", "**/*.jpg"]
             }
         }
     }
