@@ -4,14 +4,16 @@ import fr.ensicaen.oware.server.OwareServer;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter
+@Setter
 public abstract class Packet {
 
-    @Getter
-    @Setter
     protected transient OwareServer server;
 
-    void onReceive() {
+    protected transient Capitalizer capitalizer;
 
+    public void onReceive() {
+        // Not implemented here
     }
 
 }

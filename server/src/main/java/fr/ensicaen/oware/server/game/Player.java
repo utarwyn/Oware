@@ -7,7 +7,7 @@ import lombok.Getter;
 
 import java.util.Arrays;
 
-class Player {
+public class Player {
 
     private Capitalizer capitalizer;
 
@@ -16,6 +16,7 @@ class Player {
 
     Player(Capitalizer capitalizer) {
         this.capitalizer = capitalizer;
+        this.capitalizer.setPlayer(this);
 
         this.holes = new Hole[6];
         Arrays.fill(this.holes, new Hole());

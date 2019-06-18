@@ -3,6 +3,9 @@ package fr.ensicaen.oware.server.net;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.ensicaen.oware.server.OwareServer;
+import fr.ensicaen.oware.server.game.Player;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +18,10 @@ public class Capitalizer extends Thread {
     private static final Gson GSON = new GsonBuilder().registerTypeAdapter(Packet.class, new PacketTypeAdapter()).create();
 
     private OwareServer server;
+
+    @Getter
+    @Setter
+    private Player player;
 
     private Socket socket;
 
@@ -57,6 +64,7 @@ public class Capitalizer extends Thread {
     private void handlePacket(String seralizedPacket) {
         Packet packet = GSON.fromJson(seralizedPacket, Packet.class);
         if (packet != null) {
+            packet.setCapitalizer(this);
             packet.setServer(this.server);
             packet.onReceive();
         }

@@ -31,4 +31,14 @@ public class Game {
         this.currentPlayer.sendPlayAction();
     }
 
+    public void play(Player player, int position) {
+        if (this.currentPlayer != player) {
+            return;
+        }
+
+        int index = this.firstPlayer == player ? 1 : 2;
+        System.out.println("#" + index + " playing at " + position);
+        this.nextRound();
+    }
+
 }

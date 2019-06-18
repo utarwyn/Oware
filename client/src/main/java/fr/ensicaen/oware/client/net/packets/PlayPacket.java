@@ -1,5 +1,6 @@
 package fr.ensicaen.oware.client.net.packets;
 
+import fr.ensicaen.oware.client.controllers.GameController;
 import fr.ensicaen.oware.client.net.Packet;
 
 /**
@@ -16,7 +17,9 @@ public class PlayPacket extends Packet {
 	 */
 	@Override
 	public void onReceive() {
-		System.out.println("It's my turn to play.");
+		System.out.println("It's my turn!");
+		GameController controller = this.application.getStage().getController();
+		controller.displayMyTurnText(true);
 	}
 
 }

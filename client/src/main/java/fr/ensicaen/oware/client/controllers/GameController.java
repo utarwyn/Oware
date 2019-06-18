@@ -1,7 +1,9 @@
 package fr.ensicaen.oware.client.controllers;
 
 import fr.ensicaen.oware.client.game.GameBoard;
+import fr.ensicaen.oware.client.net.packets.HoleActionPacket;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -24,6 +26,9 @@ public class GameController extends Controller {
     private Pane mainPanel;
 
     @FXML
+    private Text myTurnText;
+
+    @FXML
     private Pane opponentHolesPane;
 
     @FXML
@@ -35,6 +40,11 @@ public class GameController extends Controller {
     @Override
     public void load() {
         this.enableMovingSystem(this.mainPanel);
+
+        // Load buttons to play
+        for (Node node : this.myHolesPane.getChildren()) {
+            ((Button) node).setOnAction(this::onChooseHole);
+        }
     }
 
     /**
@@ -42,9 +52,11 @@ public class GameController extends Controller {
      */
     public void updateGameBoard(GameBoard gameBoard) {
         Platform.runLater(() -> {
+            // Create an iterator for each player
             Iterator<Node> myHoles = this.myHolesPane.getChildren().iterator();
             Iterator<Node> opHoles = this.opponentHolesPane.getChildren().iterator();
 
+            // For now, we just replacing values in texts/buttons in stage panes
             for (int i = 0; i < gameBoard.getPlayerHoles().length; i++) {
                 ((Button) myHoles.next()).setText(String.valueOf(gameBoard.getPlayerHoles()[i].getSeeds()));
             }
@@ -55,12 +67,33 @@ public class GameController extends Controller {
     }
 
     /**
+     * Display or not the text which indicates that its the player's turn.
+     */
+    public void displayMyTurnText(boolean display) {
+        this.myTurnText.setVisible(display);
+    }
+
+    /**
      * Close the socket to communicate with the server.
      *
      * @throws IOException Throwed if the connection cannot be closed.
      */
     public void closeClientSocket() throws IOException {
         this.application.getClient().getSocket().close();
+    }
+
+    /**
+     * Method called when a hole have to be played (represented by a button)
+     *
+     * @param event Event of the action.
+     */
+    private void onChooseHole(ActionEvent event) {
+        if (this.myTurnText.isVisible()) {
+            this.displayMyTurnText(false);
+
+            int position = this.myHolesPane.getChildren().indexOf(event.getSource());
+            this.application.getClient().sendPacket(new HoleActionPacket(position));
+        }
     }
 
 }
