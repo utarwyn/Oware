@@ -1,6 +1,5 @@
 package fr.ensicaen.oware.client.stages;
 
-import com.google.gson.internal.GsonBuildConfig;
 import fr.ensicaen.oware.client.OwareApp;
 import fr.ensicaen.oware.client.controllers.Controller;
 import javafx.fxml.FXMLLoader;
@@ -52,7 +51,7 @@ public abstract class OwareStage extends Stage {
      * @param <T> Generic type of the controller. Must extends the Oware controller class.
      * @return The controller with the choosen type.
      */
-    <T extends Controller> T getController() {
+    public <T extends Controller> T getController() {
         return (T) this.controller;
     }
 

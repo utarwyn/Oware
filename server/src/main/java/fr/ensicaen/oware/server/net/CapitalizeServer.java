@@ -1,6 +1,6 @@
 package fr.ensicaen.oware.server.net;
 
-import fr.ensicaen.oware.server.Main;
+import fr.ensicaen.oware.server.OwareServer;
 import fr.ensicaen.oware.server.game.Game;
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ import java.net.ServerSocket;
 @Getter
 public class CapitalizeServer {
 
-    private Main main;
+    private OwareServer server;
 
     private int port;
 
@@ -20,8 +20,8 @@ public class CapitalizeServer {
 
     private Capitalizer secondClient;
 
-    public CapitalizeServer(Main main, int port) {
-        this.main = main;
+    public CapitalizeServer(OwareServer server, int port) {
+        this.server = server;
         this.port = port;
     }
 
@@ -32,7 +32,7 @@ public class CapitalizeServer {
 
             while (!this.serverSocket.isClosed()) {
                 if (this.firstClient == null || this.secondClient == null) {
-                    Capitalizer capitalizer = new Capitalizer(this.main, this.serverSocket.accept());
+                    Capitalizer capitalizer = new Capitalizer(this.server, this.serverSocket.accept());
 
                     capitalizer.initialize();
 
@@ -43,8 +43,8 @@ public class CapitalizeServer {
                         this.secondClient = capitalizer;
                         System.out.println("Second client connected!");
 
-                        this.main.setGame(new Game(this.main));
-                        this.main.getGame().nextRound();
+                        this.server.setGame(new Game(this.server));
+                        this.server.getGame().nextRound();
                     }
                 }
             }

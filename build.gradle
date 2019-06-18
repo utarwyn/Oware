@@ -53,7 +53,7 @@ project('client') {
 }
 
 project('server') {
-    mainClassName = "fr.ensicaen.oware.server.Main"
+    mainClassName = "fr.ensicaen.oware.server.OwareServer"
     jar {
         // Tune the java manifest, to tell about the main class
         manifest {

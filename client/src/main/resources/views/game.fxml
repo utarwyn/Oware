@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 <Pane xmlns:fx="http://javafx.com/fxml" fx:id="mainPanel" xmlns="http://javafx.com/javafx"
       fx:controller="fr.ensicaen.oware.client.controllers.GameController" prefHeight="490" prefWidth="490"
       styleClass="main-panel" stylesheets="@../styles/main.css">
-    <ImageView fitHeight="490" fitWidth="490" pickOnBounds="true" preserveRatio="true">
-        <Image url="@../images/background.jpg"/>
-    </ImageView>
+
+    <Text text="Plateau de jeu simplifié :" layoutX="25" layoutY="30"/>
+
+    <GridPane alignment="center" hgap="10" vgap="10" fx:id="opponentHolesPane" layoutY="30">
+        <padding>
+            <Insets top="25" right="25" bottom="25" left="25"/>
+        </padding>
+
+        <Text text="-" GridPane.columnIndex="5" GridPane.rowIndex="0" textAlignment="CENTER" wrappingWidth="50"/>
+        <Text text="-" GridPane.columnIndex="4" GridPane.rowIndex="0" textAlignment="CENTER" wrappingWidth="50"/>
+        <Text text="-" GridPane.columnIndex="3" GridPane.rowIndex="0" textAlignment="CENTER" wrappingWidth="50"/>
+        <Text text="-" GridPane.columnIndex="2" GridPane.rowIndex="0" textAlignment="CENTER" wrappingWidth="50"/>
+        <Text text="-" GridPane.columnIndex="1" GridPane.rowIndex="0" textAlignment="CENTER" wrappingWidth="50"/>
+        <Text text="-" GridPane.columnIndex="0" GridPane.rowIndex="0" textAlignment="CENTER" wrappingWidth="50"/>
+    </GridPane>
+    <GridPane alignment="center" hgap="10" vgap="10" fx:id="myHolesPane" layoutY="40">
+        <padding>
+            <Insets top="25" right="25" bottom="25" left="25"/>
+        </padding>
+
+        <Button text="-" GridPane.columnIndex="0" GridPane.rowIndex="1" prefWidth="50"/>
+        <Button text="-" GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="50"/>
+        <Button text="-" GridPane.columnIndex="2" GridPane.rowIndex="1" prefWidth="50"/>
+        <Button text="-" GridPane.columnIndex="3" GridPane.rowIndex="1" prefWidth="50"/>
+        <Button text="-" GridPane.columnIndex="4" GridPane.rowIndex="1" prefWidth="50"/>
+        <Button text="-" GridPane.columnIndex="5" GridPane.rowIndex="1" prefWidth="50"/>
+    </GridPane>
+
 </Pane>

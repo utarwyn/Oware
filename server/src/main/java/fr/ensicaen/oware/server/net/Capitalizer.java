@@ -2,7 +2,7 @@ package fr.ensicaen.oware.server.net;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import fr.ensicaen.oware.server.Main;
+import fr.ensicaen.oware.server.OwareServer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,15 +14,15 @@ public class Capitalizer extends Thread {
 
     private static final Gson GSON = new GsonBuilder().registerTypeAdapter(Packet.class, new PacketTypeAdapter()).create();
 
-    private Main main;
+    private OwareServer server;
 
     private Socket socket;
 
     private PrintWriter outStream;
 
-    Capitalizer(Main main, Socket socket) {
+    Capitalizer(OwareServer server, Socket socket) {
         this.socket = socket;
-        this.main = main;
+        this.server = server;
     }
 
     void initialize() throws IOException {
@@ -57,7 +57,7 @@ public class Capitalizer extends Thread {
     private void handlePacket(String seralizedPacket) {
         Packet packet = GSON.fromJson(seralizedPacket, Packet.class);
         if (packet != null) {
-            packet.setMain(this.main);
+            packet.setServer(this.server);
             packet.onReceive();
         }
     }

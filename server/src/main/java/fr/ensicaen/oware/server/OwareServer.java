@@ -6,20 +6,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-public class Main {
+public class OwareServer {
 
     @Setter
     private Game game;
 
     private CapitalizeServer capitalizeServer;
 
-    public Main() {
+    private OwareServer() {
         this.capitalizeServer = new CapitalizeServer(this, 59898);
         this.capitalizeServer.listen();
     }
 
     public static void main(String[] args) {
-        new Main();
+        new OwareServer();
     }
 
 }

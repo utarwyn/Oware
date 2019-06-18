@@ -7,4 +7,9 @@ public class Hole {
 
     private int seeds;
 
+    @Override
+    public String toString() {
+        return String.valueOf(this.seeds);
+    }
+
 }
