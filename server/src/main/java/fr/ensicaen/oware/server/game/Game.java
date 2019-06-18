@@ -1,7 +1,11 @@
 package fr.ensicaen.oware.server.game;
 
 import fr.ensicaen.oware.server.OwareServer;
+import fr.ensicaen.oware.server.util.CyclicIterator;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class Game {
@@ -32,13 +36,38 @@ public class Game {
     }
 
     public void play(Player player, int position) {
-        if (this.currentPlayer != player) {
+        if (this.currentPlayer != player || position < 0 || position >= Player.HOLES_PER_PLAYER) {
             return;
         }
 
-        int index = this.firstPlayer == player ? 1 : 2;
-        System.out.println("#" + index + " playing at " + position);
+        int playerIndex = this.firstPlayer == player ? 0 : 1;
+        System.out.println("#" + playerIndex + " playing at " + position + "...");
+
+        // Generated a unique list with all holes to manage them
+        List<Hole> holes = new ArrayList<>();
+        Collections.addAll(holes, this.firstPlayer.getHoles());
+        Collections.addAll(holes, this.secondPlayer.getHoles());
+
+        // Rule 3: move seeds from a hole position (from 0 to 2 * HOLES_PER_PLAYER - 1) to next ones
+        this.moveSeedsFromHole(holes, playerIndex * Player.HOLES_PER_PLAYER + position);
+
+        // Now going to the next round!
         this.nextRound();
+    }
+
+    private void moveSeedsFromHole(List<Hole> holes, int position) {
+        CyclicIterator<Hole> iterator = new CyclicIterator<>(holes);
+        Hole hole = holes.get(position);
+        int seeds = hole.getSeeds();
+
+        iterator.startsAt(position).next();
+        hole.setSeeds(0);
+
+        while (seeds > 0) {
+            hole = iterator.next();
+            hole.setSeeds(hole.getSeeds() + 1);
+            seeds--;
+        }
     }
 
 }

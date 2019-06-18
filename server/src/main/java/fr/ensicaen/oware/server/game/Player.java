@@ -5,9 +5,9 @@ import fr.ensicaen.oware.server.net.packets.PlayPacket;
 import fr.ensicaen.oware.server.net.packets.UpdateGameBoardPacket;
 import lombok.Getter;
 
-import java.util.Arrays;
-
 public class Player {
+
+    static final int HOLES_PER_PLAYER = 6;
 
     private Capitalizer capitalizer;
 
@@ -16,10 +16,13 @@ public class Player {
 
     Player(Capitalizer capitalizer) {
         this.capitalizer = capitalizer;
+        this.holes = new Hole[HOLES_PER_PLAYER];
+
         this.capitalizer.setPlayer(this);
 
-        this.holes = new Hole[6];
-        Arrays.fill(this.holes, new Hole());
+        for (int i = 0; i < this.holes.length; i++) {
+            this.holes[i] = new Hole();
+        }
     }
 
     void sendGameBoard(Hole[] opponentHoles) {
