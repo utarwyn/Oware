@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -31,6 +32,9 @@ public class MenuController extends Controller {
     private static final Pattern REGEX_PORT = Pattern.compile("^[0-9]{1,5}$");
 
     @FXML
+    private Pane mainPanel;
+
+    @FXML
     private TextField hostnameTextField;
 
     @FXML
@@ -44,6 +48,9 @@ public class MenuController extends Controller {
 
     @Override
     public void load() {
+        // Enable the moving system for the root panel
+        this.enableMovingSystem(this.mainPanel);
+
         // Update version in the copyright component
         this.copyright.setText(this.copyright.getText().replace("${version}", this.application.getVersion()));
 

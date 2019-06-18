@@ -14,16 +14,6 @@ import java.io.IOException;
  */
 public class GameController extends Controller {
 
-    /**
-     * Offset X of the window
-     */
-    private double xOffset;
-
-    /**
-     * Offset Y of the window
-     */
-    private double yOffset;
-
     @FXML
     private Pane mainPanel;
 
@@ -32,17 +22,7 @@ public class GameController extends Controller {
      */
     @Override
     public void load() {
-        this.xOffset = 0;
-        this.yOffset = 0;
-
-        this.mainPanel.setOnMousePressed(event -> {
-            xOffset = this.stage.getX() - event.getScreenX();
-            yOffset = this.stage.getY() - event.getScreenY();
-        });
-        this.mainPanel.setOnMouseDragged(event -> {
-            this.stage.setX(event.getScreenX() + xOffset);
-            this.stage.setY(event.getScreenY() + yOffset);
-        });
+        this.enableMovingSystem(this.mainPanel);
     }
 
     /**

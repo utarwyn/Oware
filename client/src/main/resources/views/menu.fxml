@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
-<Pane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx"
+<Pane xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx" fx:id="mainPanel"
       fx:controller="fr.ensicaen.oware.client.controllers.MenuController" prefHeight="450" prefWidth="700"
       stylesheets="@../styles/menu.css">
     <ImageView fitHeight="450" fitWidth="700" pickOnBounds="true" preserveRatio="true">
