@@ -9,9 +9,12 @@ public class UpdateGameBoardPacket extends Packet {
 
     private Hole[] opponentHoles;
 
-    public UpdateGameBoardPacket(Hole[] myHoles, Hole[] opponentHoles) {
+    private int collectedSeeds;
+
+    public UpdateGameBoardPacket(Hole[] myHoles, Hole[] opponentHoles, int collectedSeeds) {
         this.myHoles = myHoles;
         this.opponentHoles = opponentHoles;
+        this.collectedSeeds = collectedSeeds;
     }
 
 }

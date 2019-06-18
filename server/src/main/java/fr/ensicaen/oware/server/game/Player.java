@@ -5,6 +5,8 @@ import fr.ensicaen.oware.server.net.packets.PlayPacket;
 import fr.ensicaen.oware.server.net.packets.UpdateGameBoardPacket;
 import lombok.Getter;
 
+import java.util.Arrays;
+
 public class Player {
 
     static final int HOLES_PER_PLAYER = 6;
@@ -13,6 +15,9 @@ public class Player {
 
     @Getter
     private Hole[] holes;
+
+    @Getter
+    private int collectedSeeds;
 
     Player(Capitalizer capitalizer) {
         this.capitalizer = capitalizer;
@@ -25,8 +30,16 @@ public class Player {
         }
     }
 
+    boolean ownHole(Hole hole) {
+        return Arrays.asList(this.holes).contains(hole);
+    }
+
+    void collectSeeds(int n) {
+        this.collectedSeeds += n;
+    }
+
     void sendGameBoard(Hole[] opponentHoles) {
-        this.capitalizer.sendPacket(new UpdateGameBoardPacket(this.holes, opponentHoles));
+        this.capitalizer.sendPacket(new UpdateGameBoardPacket(this.holes, opponentHoles, this.collectedSeeds));
     }
 
     void sendPlayAction() {

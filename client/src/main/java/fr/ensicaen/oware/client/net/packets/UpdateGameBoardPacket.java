@@ -26,17 +26,23 @@ public class UpdateGameBoardPacket extends Packet {
      */
     private Hole[] opponentHoles;
 
+    /**
+     * Number of collected seeds by this player
+     */
+    private int collectedSeeds;
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public void onReceive() {
         System.out.println("Gameboard updated from the server!");
-        System.out.println("my holes      : " + Arrays.toString(this.myHoles));
-        System.out.println("opponent holes: " + Arrays.toString(this.opponentHoles));
+        System.out.println("my holes       : " + Arrays.toString(this.myHoles));
+        System.out.println("opponent holes : " + Arrays.toString(this.opponentHoles));
+        System.out.println("collected seeds: " + this.collectedSeeds);
 
         GameController controller = this.application.getStage().getController();
-        controller.updateGameBoard(new GameBoard(this.myHoles, this.opponentHoles));
+        controller.updateGameBoard(new GameBoard(this.myHoles, this.opponentHoles, this.collectedSeeds));
 	}
 
 }

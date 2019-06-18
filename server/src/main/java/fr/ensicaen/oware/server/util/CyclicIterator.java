@@ -6,51 +6,63 @@ import java.util.NoSuchElementException;
 
 public class CyclicIterator<T> implements Iterator<T> {
 
+    private int position;
+
     private final List<T> list;
-    private Iterator<T> iterator;
 
     public CyclicIterator(List<T> list) {
+        this(list, 0);
+    }
+
+    public CyclicIterator(List<T> list, int position) {
+        this.position = position - 1;
         this.list = list;
-        this.iterator = list.iterator();
     }
 
-    public CyclicIterator startsAt(int x) {
-        if (x < 0 || this.list.size() < x) {
-            throw new IndexOutOfBoundsException();
-        }
-
-        // Ignore the first x values
-        for (; x > 0; --x) {
-            this.next();
-        }
-
-        return this;
-    }
-
-    @Override
     public boolean hasNext() {
         return !this.list.isEmpty();
     }
 
-    @Override
     public T next() {
-        T nextElement;
-
         if (!this.hasNext()) {
             throw new NoSuchElementException();
-        } else if (this.iterator.hasNext()) {
-            nextElement = this.iterator.next();
         } else {
-            this.iterator = this.list.iterator();
-            nextElement = this.iterator.next();
+            this.position = this.nextIndex();
+            return this.list.get(this.position);
         }
-
-        return nextElement;
     }
 
-    @Override
-    public void remove() {
-        this.iterator.remove();
+    public boolean hasPrevious() {
+        return !this.list.isEmpty();
+    }
+
+    public T previous() {
+        if (!this.hasPrevious()) {
+            throw new NoSuchElementException();
+        } else {
+            this.position = this.previousIndex();
+            return this.list.get(this.position);
+        }
+    }
+
+    public T current() {
+        return this.list.get(this.position);
+    }
+
+    public int nextIndex() {
+        if (this.position == this.list.size() - 1) {
+            return 0;
+        } else {
+            return this.position + 1;
+        }
+    }
+
+    public int previousIndex() {
+        if (this.position <= 0) {
+            return this.list.size() - 1;
+        } else {
+            return this.position - 1;
+        }
     }
 
 }

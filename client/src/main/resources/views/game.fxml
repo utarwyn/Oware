@@ -9,7 +9,8 @@
       styleClass="main-panel" stylesheets="@../styles/main.css">
 
     <Text text="Simplified gameboard :" layoutX="25" layoutY="30"/>
-    <Text fx:id="myTurnText" text="It's your turn!" layoutX="25" layoutY="120" visible="false"/>
+    <Text fx:id="collected" text="Collected seeds: 0" layoutX="25" layoutY="120"/>
+    <Text fx:id="myTurnText" text="It's your turn!" layoutX="25" layoutY="135" visible="false"/>
 
     <GridPane alignment="center" hgap="10" vgap="10" fx:id="opponentHolesPane" layoutY="30">
         <padding>

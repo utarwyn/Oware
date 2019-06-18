@@ -44,29 +44,45 @@ public class Game {
         System.out.println("#" + playerIndex + " playing at " + position + "...");
 
         // Generated a unique list with all holes to manage them
+        // (and also a cyclic iterator to browse through them)
         List<Hole> holes = new ArrayList<>();
         Collections.addAll(holes, this.firstPlayer.getHoles());
         Collections.addAll(holes, this.secondPlayer.getHoles());
 
+        int originPosition = playerIndex * Player.HOLES_PER_PLAYER + position;
+        CyclicIterator<Hole> iterator = new CyclicIterator<>(holes, originPosition);
+
         // Rule 3: move seeds from a hole position (from 0 to 2 * HOLES_PER_PLAYER - 1) to next ones
-        this.moveSeedsFromHole(holes, playerIndex * Player.HOLES_PER_PLAYER + position);
+        this.moveSeedsFromHole(iterator);
+
+        // Rule 4: collect seeds if holes got 2 or 3 of them
+        this.collectSeeds(iterator);
 
         // Now going to the next round!
         this.nextRound();
     }
 
-    private void moveSeedsFromHole(List<Hole> holes, int position) {
-        CyclicIterator<Hole> iterator = new CyclicIterator<>(holes);
-        Hole hole = holes.get(position);
+    private void moveSeedsFromHole(CyclicIterator<Hole> iterator) {
+        Hole hole = iterator.next();
         int seeds = hole.getSeeds();
 
-        iterator.startsAt(position).next();
         hole.setSeeds(0);
 
         while (seeds > 0) {
             hole = iterator.next();
             hole.setSeeds(hole.getSeeds() + 1);
             seeds--;
+        }
+    }
+
+    private void collectSeeds(CyclicIterator<Hole> iterator) {
+        Hole hole = iterator.current();
+
+        while (!this.currentPlayer.ownHole(hole) && hole.getSeeds() == 2 || hole.getSeeds() == 3) {
+            this.currentPlayer.collectSeeds(hole.getSeeds());
+            hole.setSeeds(0);
+
+            hole = iterator.previous();
         }
     }
 

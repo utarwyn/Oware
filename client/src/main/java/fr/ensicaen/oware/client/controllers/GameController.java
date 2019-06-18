@@ -29,6 +29,9 @@ public class GameController extends Controller {
     private Text myTurnText;
 
     @FXML
+    private Text collected;
+
+    @FXML
     private Pane opponentHolesPane;
 
     @FXML
@@ -48,7 +51,7 @@ public class GameController extends Controller {
     }
 
     /**
-     * Update the stage with gameboard information
+     * Update the stage with gameboard information. Temporary method.
      */
     public void updateGameBoard(GameBoard gameBoard) {
         Platform.runLater(() -> {
@@ -63,6 +66,9 @@ public class GameController extends Controller {
             for (int i = 0; i < gameBoard.getOpponentHoles().length; i++) {
                 ((Text) opHoles.next()).setText(String.valueOf(gameBoard.getOpponentHoles()[i].getSeeds()));
             }
+
+            // Update collected seeds
+            this.collected.setText("Collected seeds: " + gameBoard.getCollectedSeeds());
         });
     }
 

@@ -8,6 +8,9 @@ import lombok.Getter;
 public class GameBoard {
 
 	private Hole[] playerHoles;
+
 	private Hole[] opponentHoles;
+
+	private int collectedSeeds;
 
 }
