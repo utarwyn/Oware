@@ -3,6 +3,8 @@ package fr.ensicaen.oware.client.net;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.ensicaen.oware.client.OwareApp;
+import fr.ensicaen.oware.client.stages.MenuStage;
+import javafx.application.Platform;
 import lombok.Getter;
 
 import java.io.BufferedReader;
@@ -19,7 +21,7 @@ import java.net.Socket;
  * @author Pierre Poulain <pierre.poulain@ecole.ensicaen.fr>
  */
 @Getter
-public class CapitalizeClient extends Thread {
+public class CapitalizeClient implements Runnable {
 
     /**
      * The Gson object to serialize/deserialize packets
@@ -60,7 +62,7 @@ public class CapitalizeClient extends Thread {
     public void connectToServer(String host, int port) throws IOException {
         this.socket = new Socket(host, port);
         this.outStream = new PrintWriter(this.socket.getOutputStream(), true);
-        this.start();
+        new Thread(this).start();
     }
 
     /**
@@ -74,11 +76,12 @@ public class CapitalizeClient extends Thread {
             while ((inputLine = reader.readLine()) != null) {
                 this.handlePacket(inputLine);
             }
+
+            // Close the socket when we have finished the connection seems to be closed
+            this.closeSocket();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        this.outStream.close();
     }
 
     /**
@@ -101,6 +104,22 @@ public class CapitalizeClient extends Thread {
             packet.setApplication(this.application);
             packet.onReceive();
         }
+    }
+
+    /**
+     * Called when the connection to the Oware server is interrupted.
+     */
+    private void closeSocket() throws IOException {
+        this.outStream.close();
+        this.socket.close();
+
+        Platform.runLater(() -> {
+            try {
+                this.application.displayStage(new MenuStage());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 }

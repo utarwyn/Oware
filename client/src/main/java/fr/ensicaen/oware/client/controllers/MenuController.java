@@ -57,6 +57,11 @@ public class MenuController extends Controller {
         // Send the form when key enter is pressed in hostname/port fields
         this.hostnameTextField.setOnKeyPressed(this::onFieldKeyPressed);
         this.portTextField.setOnKeyPressed(this::onFieldKeyPressed);
+
+        // Connection has existed before but its now closed
+        if (this.application.getClient().getSocket() != null) {
+            this.showErrorMessage("Connection to the server has been interrupted.");
+        }
     }
 
     /**
