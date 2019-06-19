@@ -1,6 +1,7 @@
 package fr.ensicaen.oware.client.controllers;
 
 import fr.ensicaen.oware.client.game.GameBoard;
+import fr.ensicaen.oware.client.game.Hole;
 import fr.ensicaen.oware.client.net.packets.HoleActionPacket;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -59,7 +60,11 @@ public class GameController extends Controller {
 
         // For now, we just replacing values in texts/buttons in stage panes
         for (int i = 0; i < gameBoard.getPlayerHoles().length; i++) {
-            ((Button) myHoles.next()).setText(String.valueOf(gameBoard.getPlayerHoles()[i].getSeeds()));
+            Button button = (Button) myHoles.next();
+            Hole hole = gameBoard.getPlayerHoles()[i];
+
+            button.setText(String.valueOf(hole.getSeeds()));
+            button.setDisable(hole.getSeeds() == 0);
         }
         for (int i = 0; i < gameBoard.getOpponentHoles().length; i++) {
             ((Text) opHoles.next()).setText(String.valueOf(gameBoard.getOpponentHoles()[i].getSeeds()));

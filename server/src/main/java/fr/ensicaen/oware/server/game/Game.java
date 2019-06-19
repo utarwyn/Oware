@@ -36,7 +36,8 @@ public class Game {
     }
 
     public void play(Player player, int position) {
-        if (this.currentPlayer != player || position < 0 || position >= Player.HOLES_PER_PLAYER) {
+        // Check if the action is valid before continuing...
+        if (!this.checkActionValidity(player, position)) {
             return;
         }
 
@@ -60,6 +61,11 @@ public class Game {
 
         // Now going to the next round!
         this.nextRound();
+    }
+
+    private boolean checkActionValidity(Player player, int position) {
+        return this.currentPlayer == player && position >= 0 && position < Player.HOLES_PER_PLAYER &&
+                player.getHoles()[position].getSeeds() > 0;
     }
 
     private void moveSeedsFromHole(CyclicIterator<Hole> iterator) {
