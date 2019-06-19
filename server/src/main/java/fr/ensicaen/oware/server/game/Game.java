@@ -107,12 +107,21 @@ public class Game {
 
     private void collectSeeds(CyclicIterator<Hole> iterator) {
         Hole hole = iterator.current();
+        Player opponent = getOpponent(this.currentPlayer);
+        int[] seedStore = opponent.getHoleSeeds();
 
         while (!this.currentPlayer.ownHole(hole) && (hole.getSeeds() == 2 || hole.getSeeds() == 3)) {
             this.currentPlayer.collectSeeds(hole.getSeeds());
             hole.setSeeds(0);
 
             hole = iterator.previous();
+        }
+
+        // rule 7: if all holes of the opponent are empty, we have to rollback the action
+        if (opponent.hasEmptyHoles()) {
+            for (int i = 0; i < Player.HOLES_PER_PLAYER; i++) {
+                opponent.getHoles()[i].setSeeds(seedStore[i]);
+            }
         }
     }
 

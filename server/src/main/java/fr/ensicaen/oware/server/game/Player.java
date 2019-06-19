@@ -46,6 +46,10 @@ public class Player {
         return Arrays.stream(this.holes).anyMatch(Hole::isPlayable);
     }
 
+    int[] getHoleSeeds() {
+        return Arrays.stream(this.holes).mapToInt(Hole::getSeeds).toArray();
+    }
+
     void collectSeeds(int n) {
         this.collectedSeeds += n;
     }
