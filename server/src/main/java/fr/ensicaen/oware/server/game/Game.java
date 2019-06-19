@@ -18,8 +18,8 @@ public class Game {
 
     public Game(OwareServer server) {
         System.out.println("Game started!");
-        this.firstPlayer = new Player(server.getCapitalizeServer().getFirstClient());
-        this.secondPlayer = new Player(server.getCapitalizeServer().getSecondClient());
+        this.firstPlayer = new Player(0, server.getCapitalizeServer().getFirstClient());
+        this.secondPlayer = new Player(1, server.getCapitalizeServer().getSecondClient());
         this.currentPlayer = new Random().nextInt() > 0.5 ? this.firstPlayer : this.secondPlayer;
     }
 
@@ -28,8 +28,7 @@ public class Game {
         this.currentPlayer = this.currentPlayer == this.firstPlayer ? this.secondPlayer : this.firstPlayer;
 
         // Send the gameboard to players
-        this.firstPlayer.sendGameBoard(this.secondPlayer.getHoles());
-        this.secondPlayer.sendGameBoard(this.firstPlayer.getHoles());
+        this.sendGameboard();
 
         // And send the play packet to the current player
         this.currentPlayer.sendPlayAction();
@@ -41,8 +40,7 @@ public class Game {
             return;
         }
 
-        int playerIndex = this.firstPlayer == player ? 0 : 1;
-        System.out.println("#" + playerIndex + " playing at " + position + "...");
+        System.out.println("#" + (player.getIndex() + 1) + " playing at " + position + "...");
 
         // Generated a unique list with all holes to manage them
         // (and also a cyclic iterator to browse through them)
@@ -50,17 +48,39 @@ public class Game {
         Collections.addAll(holes, this.firstPlayer.getHoles());
         Collections.addAll(holes, this.secondPlayer.getHoles());
 
-        int originPosition = playerIndex * Player.HOLES_PER_PLAYER + position;
+        int originPosition = player.getIndex() * Player.HOLES_PER_PLAYER + position;
         CyclicIterator<Hole> iterator = new CyclicIterator<>(holes, originPosition);
 
-        // Rule 3: move seeds from a hole position (from 0 to 2 * HOLES_PER_PLAYER - 1) to next ones
-        this.moveSeedsFromHole(iterator);
+        // Rule 6: check if this hole can be played
+        if (holes.get(originPosition).isPlayable()) {
+            // Rule 3: move seeds from a hole position (from 0 to 2 * HOLES_PER_PLAYER - 1) to next ones
+            this.moveSeedsFromHole(iterator);
 
-        // Rule 4: collect seeds if holes got 2 or 3 of them
-        this.collectSeeds(iterator);
+            // Rule 4: collect seeds if holes got 2 or 3 of them
+            this.collectSeeds(iterator);
 
-        // Now going to the next round!
-        this.nextRound();
+            // Rule 6: update playable holes for the next player (if he need to feed the opponent)
+            this.updatePlayableHolesOf(getOpponent(player));
+
+            // Rule 6,8: check if the game has ended
+            if (this.hasEnded()) {
+                System.out.println("Game ended.");
+                // Send the gameboard, TODO end-game packets
+                this.sendGameboard();
+            } else {
+                // Now going to the next round!
+                this.nextRound();
+            }
+        }
+    }
+
+    private Player getOpponent(Player player) {
+        return player == this.firstPlayer ? this.secondPlayer : this.firstPlayer;
+    }
+
+    private void sendGameboard() {
+        this.firstPlayer.sendGameBoard(this.secondPlayer.getHoles());
+        this.secondPlayer.sendGameBoard(this.firstPlayer.getHoles());
     }
 
     private boolean checkActionValidity(Player player, int position) {
@@ -77,7 +97,7 @@ public class Game {
         while (seeds > 0) {
             Hole hole = iterator.next();
 
-            // rule 5: cannot fill the origin hole
+            // rule 5: cannot fill the original hole
             if (hole != origin) {
                 hole.setSeeds(hole.getSeeds() + 1);
                 seeds--;
@@ -94,6 +114,27 @@ public class Game {
 
             hole = iterator.previous();
         }
+    }
+
+    private void updatePlayableHolesOf(Player player) {
+        Player opponent = this.getOpponent(player);
+
+        int i = 0;
+        for (Hole hole : player.getHoles()) {
+            // rule 6: we need to feed one of opponent holes if needed
+            if (opponent.hasEmptyHoles()) {
+                hole.setPlayable(hole.getSeeds() > Player.HOLES_PER_PLAYER - 1 - i);
+            } else {
+                hole.setPlayable(true);
+            }
+
+            i++;
+        }
+    }
+
+    private boolean hasEnded() {
+        // rule 6: the opponent must play in the next round (he has to be fed)
+        return !this.getOpponent(this.currentPlayer).canPlay();
     }
 
 }

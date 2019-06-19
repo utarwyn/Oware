@@ -4,14 +4,26 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
 public class Hole {
 
     private static final int DEFAULT_SEEDS = 4;
 
-    @Setter
     private int seeds;
 
-    public Hole() {
+    private boolean playable;
+
+    Hole() {
         this.seeds = DEFAULT_SEEDS;
+        this.playable = true;
     }
+
+    @Override
+    public String toString() {
+        return "Hole #" + this.hashCode() +
+                " {seeds=" + seeds +
+                ", playable=" + playable +
+                '}';
+    }
+
 }

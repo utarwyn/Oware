@@ -64,7 +64,7 @@ public class GameController extends Controller {
             Hole hole = gameBoard.getPlayerHoles()[i];
 
             button.setText(String.valueOf(hole.getSeeds()));
-            button.setDisable(hole.getSeeds() == 0);
+            button.setDisable(!hole.isPlayable() || hole.getSeeds() == 0);
         }
         for (int i = 0; i < gameBoard.getOpponentHoles().length; i++) {
             ((Text) opHoles.next()).setText(String.valueOf(gameBoard.getOpponentHoles()[i].getSeeds()));

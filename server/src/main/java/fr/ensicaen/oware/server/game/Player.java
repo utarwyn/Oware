@@ -14,12 +14,16 @@ public class Player {
     private Capitalizer capitalizer;
 
     @Getter
+    private int index;
+
+    @Getter
     private Hole[] holes;
 
     @Getter
     private int collectedSeeds;
 
-    Player(Capitalizer capitalizer) {
+    Player(int index, Capitalizer capitalizer) {
+        this.index = index;
         this.capitalizer = capitalizer;
         this.holes = new Hole[HOLES_PER_PLAYER];
 
@@ -32,6 +36,14 @@ public class Player {
 
     boolean ownHole(Hole hole) {
         return Arrays.asList(this.holes).contains(hole);
+    }
+
+    boolean hasEmptyHoles() {
+        return Arrays.stream(this.holes).allMatch(hole -> hole.getSeeds() == 0);
+    }
+
+    boolean canPlay() {
+        return Arrays.stream(this.holes).anyMatch(Hole::isPlayable);
     }
 
     void collectSeeds(int n) {
