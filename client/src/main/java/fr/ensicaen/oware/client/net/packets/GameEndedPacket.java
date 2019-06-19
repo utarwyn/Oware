@@ -1,8 +1,11 @@
 package fr.ensicaen.oware.client.net.packets;
 
 import fr.ensicaen.oware.client.net.Packet;
+import fr.ensicaen.oware.client.stages.MenuStage;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
+
+import java.io.IOException;
 
 public class GameEndedPacket extends Packet {
 
@@ -22,8 +25,14 @@ public class GameEndedPacket extends Packet {
             }
 
             alert.showAndWait();
+
+            // Return to the menu
+            try {
+                this.application.displayStage(new MenuStage());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
-        System.out.println("end game! " + this.type);
     }
 
     public enum EndType {

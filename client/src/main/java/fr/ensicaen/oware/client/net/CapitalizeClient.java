@@ -76,10 +76,14 @@ public class CapitalizeClient implements Runnable {
             while ((inputLine = reader.readLine()) != null) {
                 this.handlePacket(inputLine);
             }
-
-            // Close the socket when we have finished the connection seems to be closed
-            this.closeSocket();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Close the socket when the connection seems to be interrupted
+        try {
+            this.closeSocket();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -115,7 +119,7 @@ public class CapitalizeClient implements Runnable {
 
         Platform.runLater(() -> {
             try {
-                this.application.displayStage(new MenuStage());
+                this.application.displayStage(new MenuStage(true));
             } catch (IOException e) {
                 e.printStackTrace();
             }

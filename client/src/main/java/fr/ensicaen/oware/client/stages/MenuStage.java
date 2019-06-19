@@ -2,6 +2,7 @@ package fr.ensicaen.oware.client.stages;
 
 import javafx.scene.text.Font;
 import javafx.stage.StageStyle;
+import lombok.Getter;
 
 /**
  * Represents the Menu stage.
@@ -11,11 +12,22 @@ import javafx.stage.StageStyle;
  */
 public class MenuStage extends OwareStage {
 
+    @Getter
+    private boolean connectionError;
+
     /**
      * {@inheritDoc}
      */
     public MenuStage() {
+        this(false);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public MenuStage(boolean connectionError) {
         super("menu.fxml", "Oware | Connect to a server");
+        this.connectionError = connectionError;
     }
 
     /**
