@@ -1,6 +1,7 @@
 package fr.ensicaen.oware.server.game;
 
 import fr.ensicaen.oware.server.net.Capitalizer;
+import fr.ensicaen.oware.server.net.packets.GameEndedPacket;
 import fr.ensicaen.oware.server.net.packets.PlayPacket;
 import fr.ensicaen.oware.server.net.packets.UpdateGameBoardPacket;
 import lombok.Getter;
@@ -10,6 +11,8 @@ import java.util.Arrays;
 public class Player {
 
     static final int HOLES_PER_PLAYER = 6;
+
+    static final int MAX_COLLECTED_SEEDS = 25;
 
     private Capitalizer capitalizer;
 
@@ -60,6 +63,10 @@ public class Player {
 
     void sendPlayAction() {
         this.capitalizer.sendPacket(new PlayPacket());
+    }
+
+    void sendEndGame(GameEndedPacket.EndType endType) {
+        this.capitalizer.sendPacket(new GameEndedPacket(endType));
     }
 
 }

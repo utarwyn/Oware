@@ -1,14 +1,17 @@
 package fr.ensicaen.oware.server.game;
 
 import fr.ensicaen.oware.server.OwareServer;
+import fr.ensicaen.oware.server.net.CapitalizeServer;
+import fr.ensicaen.oware.server.net.packets.GameEndedPacket;
 import fr.ensicaen.oware.server.util.CyclicIterator;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Game {
+
+    private static final int MAX_SEEDS_INGAME = 6;
+
+    private CapitalizeServer server;
 
     private Player firstPlayer;
 
@@ -18,8 +21,10 @@ public class Game {
 
     public Game(OwareServer server) {
         System.out.println("Game started!");
-        this.firstPlayer = new Player(0, server.getCapitalizeServer().getFirstClient());
-        this.secondPlayer = new Player(1, server.getCapitalizeServer().getSecondClient());
+
+        this.server = server.getCapitalizeServer();
+        this.firstPlayer = new Player(0, this.server.getFirstClient());
+        this.secondPlayer = new Player(1, this.server.getSecondClient());
         this.currentPlayer = new Random().nextInt() > 0.5 ? this.firstPlayer : this.secondPlayer;
     }
 
@@ -64,9 +69,7 @@ public class Game {
 
             // Rule 6,8: check if the game has ended
             if (this.hasEnded()) {
-                System.out.println("Game ended.");
-                // Send the gameboard, TODO end-game packets
-                this.sendGameboard();
+                this.end();
             } else {
                 // Now going to the next round!
                 this.nextRound();
@@ -141,9 +144,41 @@ public class Game {
         }
     }
 
+    private void end() {
+        Player winner = this.getWinner();
+
+        // Send the gameboard first!
+        this.sendGameboard();
+
+        if (winner != null) {
+            winner.sendEndGame(GameEndedPacket.EndType.WIN);
+            getOpponent(winner).sendEndGame(GameEndedPacket.EndType.LOSE);
+        } else {
+            this.server.broadcastPacket(new GameEndedPacket(GameEndedPacket.EndType.DRAW));
+        }
+    }
+
     private boolean hasEnded() {
         // rule 6: the opponent must play in the next round (he has to be fed)
-        return !this.getOpponent(this.currentPlayer).canPlay();
+        // rule 8: game ending conditions
+        return !this.getOpponent(this.currentPlayer).canPlay()
+                || this.firstPlayer.getCollectedSeeds() >= Player.MAX_COLLECTED_SEEDS
+                || this.secondPlayer.getCollectedSeeds() >= Player.MAX_COLLECTED_SEEDS
+                || this.getSeedsNb() <= MAX_SEEDS_INGAME;
+    }
+
+    private int getSeedsNb() {
+        return Arrays.stream(this.firstPlayer.getHoleSeeds()).sum() + Arrays.stream(this.secondPlayer.getHoleSeeds()).sum();
+    }
+
+    private Player getWinner() {
+        if (this.firstPlayer.getCollectedSeeds() > this.secondPlayer.getCollectedSeeds()) {
+            return this.firstPlayer;
+        } else if (this.firstPlayer.getCollectedSeeds() < this.secondPlayer.getCollectedSeeds()) {
+            return this.secondPlayer;
+        } else {
+            return null;
+        }
     }
 
 }
