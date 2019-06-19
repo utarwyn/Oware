@@ -11,25 +11,25 @@ import javafx.stage.StageStyle;
  */
 public class MenuStage extends OwareStage {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public MenuStage() {
-		super("menu.fxml", "Oware | Connect to a server");
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public MenuStage() {
+        super("menu.fxml", "Oware | Connect to a server");
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setup() {
-		// Load custom fonts for this stage.
-		Font.loadFont(getClass().getResourceAsStream("/fonts/OpenSans-Regular.ttf"), 12);
-		Font.loadFont(getClass().getResourceAsStream("/fonts/OpenSans-Bold.ttf"), 12);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setup() {
+        // Load custom fonts for this stage.
+        Font.loadFont(getClass().getResourceAsStream("/fonts/OpenSans-Regular.ttf"), 12);
+        Font.loadFont(getClass().getResourceAsStream("/fonts/OpenSans-Bold.ttf"), 12);
 
-		this.initStyle(StageStyle.TRANSPARENT);
-		this.setResizable(false);
-		this.getScene().setFill(null);
-	}
+        this.initStyle(StageStyle.TRANSPARENT);
+        this.setResizable(false);
+        this.getScene().setFill(null);
+    }
 
 }

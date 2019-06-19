@@ -4,6 +4,7 @@ import fr.ensicaen.oware.client.controllers.GameController;
 import fr.ensicaen.oware.client.game.GameBoard;
 import fr.ensicaen.oware.client.game.Hole;
 import fr.ensicaen.oware.client.net.Packet;
+import javafx.application.Platform;
 
 import java.util.Arrays;
 
@@ -16,9 +17,9 @@ import java.util.Arrays;
  */
 public class UpdateGameBoardPacket extends Packet {
 
-	/**
+    /**
      * List all of my holes
-	 */
+     */
     private Hole[] myHoles;
 
     /**
@@ -31,18 +32,20 @@ public class UpdateGameBoardPacket extends Packet {
      */
     private int collectedSeeds;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void onReceive() {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onReceive() {
         System.out.println("Gameboard updated from the server!");
         System.out.println("my holes       : " + Arrays.toString(this.myHoles));
         System.out.println("opponent holes : " + Arrays.toString(this.opponentHoles));
         System.out.println("collected seeds: " + this.collectedSeeds);
 
-        GameController controller = this.application.getStage().getController();
-        controller.updateGameBoard(new GameBoard(this.myHoles, this.opponentHoles, this.collectedSeeds));
-	}
+        Platform.runLater(() -> {
+            GameController controller = this.application.getStage().getController();
+            controller.updateGameBoard(new GameBoard(this.myHoles, this.opponentHoles, this.collectedSeeds));
+        });
+    }
 
 }

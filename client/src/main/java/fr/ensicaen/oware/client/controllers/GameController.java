@@ -2,7 +2,6 @@ package fr.ensicaen.oware.client.controllers;
 
 import fr.ensicaen.oware.client.game.GameBoard;
 import fr.ensicaen.oware.client.net.packets.HoleActionPacket;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -54,22 +53,20 @@ public class GameController extends Controller {
      * Update the stage with gameboard information. Temporary method.
      */
     public void updateGameBoard(GameBoard gameBoard) {
-        Platform.runLater(() -> {
-            // Create an iterator for each player
-            Iterator<Node> myHoles = this.myHolesPane.getChildren().iterator();
-            Iterator<Node> opHoles = this.opponentHolesPane.getChildren().iterator();
+        // Create an iterator for each player
+        Iterator<Node> myHoles = this.myHolesPane.getChildren().iterator();
+        Iterator<Node> opHoles = this.opponentHolesPane.getChildren().iterator();
 
-            // For now, we just replacing values in texts/buttons in stage panes
-            for (int i = 0; i < gameBoard.getPlayerHoles().length; i++) {
-                ((Button) myHoles.next()).setText(String.valueOf(gameBoard.getPlayerHoles()[i].getSeeds()));
-            }
-            for (int i = 0; i < gameBoard.getOpponentHoles().length; i++) {
-                ((Text) opHoles.next()).setText(String.valueOf(gameBoard.getOpponentHoles()[i].getSeeds()));
-            }
+        // For now, we just replacing values in texts/buttons in stage panes
+        for (int i = 0; i < gameBoard.getPlayerHoles().length; i++) {
+            ((Button) myHoles.next()).setText(String.valueOf(gameBoard.getPlayerHoles()[i].getSeeds()));
+        }
+        for (int i = 0; i < gameBoard.getOpponentHoles().length; i++) {
+            ((Text) opHoles.next()).setText(String.valueOf(gameBoard.getOpponentHoles()[i].getSeeds()));
+        }
 
-            // Update collected seeds
-            this.collected.setText("Collected seeds: " + gameBoard.getCollectedSeeds());
-        });
+        // Update collected seeds
+        this.collected.setText("Collected seeds: " + gameBoard.getCollectedSeeds());
     }
 
     /**

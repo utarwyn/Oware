@@ -63,22 +63,26 @@ public class Game {
     }
 
     private void moveSeedsFromHole(CyclicIterator<Hole> iterator) {
-        Hole hole = iterator.next();
-        int seeds = hole.getSeeds();
+        Hole origin = iterator.next();
+        int seeds = origin.getSeeds();
 
-        hole.setSeeds(0);
+        origin.setSeeds(0);
 
         while (seeds > 0) {
-            hole = iterator.next();
-            hole.setSeeds(hole.getSeeds() + 1);
-            seeds--;
+            Hole hole = iterator.next();
+
+            // rule 5: cannot fill the origin hole
+            if (hole != origin) {
+                hole.setSeeds(hole.getSeeds() + 1);
+                seeds--;
+            }
         }
     }
 
     private void collectSeeds(CyclicIterator<Hole> iterator) {
         Hole hole = iterator.current();
 
-        while (!this.currentPlayer.ownHole(hole) && hole.getSeeds() == 2 || hole.getSeeds() == 3) {
+        while (!this.currentPlayer.ownHole(hole) && (hole.getSeeds() == 2 || hole.getSeeds() == 3)) {
             this.currentPlayer.collectSeeds(hole.getSeeds());
             hole.setSeeds(0);
 

@@ -7,10 +7,10 @@ import lombok.Getter;
 @Getter
 public class GameBoard {
 
-	private Hole[] playerHoles;
+    private Hole[] playerHoles;
 
-	private Hole[] opponentHoles;
+    private Hole[] opponentHoles;
 
-	private int collectedSeeds;
+    private int collectedSeeds;
 
 }

@@ -14,33 +14,33 @@ import java.io.IOException;
  */
 public class GameStage extends OwareStage {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public GameStage() {
-		super("game.fxml", "Oware | Game");
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public GameStage() {
+        super("game.fxml", "Oware | Game");
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setup() {
-		this.initStyle(StageStyle.TRANSPARENT);
-		this.setResizable(false);
-		this.setOnCloseRequest(event -> {
-			try {
-				GameController controller = this.getController();
-				controller.closeClientSocket();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setup() {
+        this.initStyle(StageStyle.TRANSPARENT);
+        this.setResizable(false);
+        this.setOnCloseRequest(event -> {
+            try {
+                GameController controller = this.getController();
+                controller.closeClientSocket();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-			Platform.exit();
-			System.exit(0);
-		});
+            Platform.exit();
+            System.exit(0);
+        });
 
-		getScene().setFill(null);
-	}
+        getScene().setFill(null);
+    }
 
 }
