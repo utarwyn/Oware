@@ -2,6 +2,7 @@ package fr.ensicaen.oware.client.controllers;
 
 import fr.ensicaen.oware.client.game.GameBoard;
 import fr.ensicaen.oware.client.game.Hole;
+import fr.ensicaen.oware.client.net.packets.GiveUpPacket;
 import fr.ensicaen.oware.client.net.packets.HoleActionPacket;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,6 +31,9 @@ public class GameController extends Controller {
 
     @FXML
     private Text collected;
+
+    @FXML
+    private Button giveupButton;
 
     @FXML
     private Pane opponentHolesPane;
@@ -72,13 +76,45 @@ public class GameController extends Controller {
 
         // Update collected seeds
         this.collected.setText("Collected seeds: " + gameBoard.getCollectedSeeds());
+
+        // Update give up button
+        this.giveupButton.setVisible(gameBoard.isCanGiveUp());
+        this.enableGiveUpButton(false);
     }
 
     /**
      * Display or not the text which indicates that its the player's turn.
+     *
+     * @param display Display the specific text
      */
     public void displayMyTurnText(boolean display) {
         this.myTurnText.setVisible(display);
+    }
+
+    /**
+     * Enable or disable the give up button.
+     *
+     * @param enable Should the button have to be enabled?
+     */
+    public void enableGiveUpButton(boolean enable) {
+        this.giveupButton.setDisable(!enable);
+    }
+
+    /**
+     * Give up button clicked? Send the player state to the server.
+     */
+    public void onGiveUpButtonClicked() {
+        GiveUpPacket.ActionType giveUpType;
+
+        // If it's my turn, I can send a packet to propose to give up
+        if (this.myTurnText.isVisible()) {
+            giveUpType = GiveUpPacket.ActionType.PROPOSE;
+        } else {
+            giveUpType = GiveUpPacket.ActionType.ACCEPT;
+        }
+
+        this.application.getClient().sendPacket(new GiveUpPacket(giveUpType));
+        this.enableGiveUpButton(false);
     }
 
     /**

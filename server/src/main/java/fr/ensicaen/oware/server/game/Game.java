@@ -29,6 +29,10 @@ public class Game {
     }
 
     public void nextRound() {
+        // rule 9: reset players' give up state
+        this.firstPlayer.setGiveUp(false);
+        this.secondPlayer.setGiveUp(false);
+
         // Changing current player
         this.currentPlayer = this.currentPlayer == this.firstPlayer ? this.secondPlayer : this.firstPlayer;
 
@@ -69,10 +73,48 @@ public class Game {
 
             // Rule 6,8: check if the game has ended
             if (this.hasEnded()) {
-                this.end();
+                this.end(this.getWinner());
             } else {
                 // Now going to the next round!
                 this.nextRound();
+            }
+        }
+    }
+
+    public void handleGiveUpProposal(Player player) {
+        if (this.canGiveUp() && !player.isGiveUp() && this.currentPlayer == player) {
+            player.setGiveUp(true);
+            getOpponent(player).sendGiveUpProposal();
+        }
+    }
+
+    public void handleGiveUp(Player player) {
+        if (this.canGiveUp() && !player.isGiveUp() && getOpponent(this.currentPlayer) == player) {
+            player.setGiveUp(true);
+
+            // In some cases, there is no winner.
+            int seeds = this.getSeedsNb();
+
+            if (seeds < 6 && this.firstPlayer.getCollectedSeeds() <= 24
+                    && this.secondPlayer.getCollectedSeeds() <= 24) {
+                this.end(null);
+            }
+            // Else, we need to distribute all seeds to players
+            else {
+                // player is one that accept the game ending
+                getOpponent(player).collectSeeds(seeds / 2);
+                player.collectSeeds((int) Math.ceil(seeds / 2f));
+
+                // Empty the gameboard
+                for (Hole hole : this.firstPlayer.getHoles()) {
+                    hole.setSeeds(0);
+                }
+                for (Hole hole : this.secondPlayer.getHoles()) {
+                    hole.setSeeds(0);
+                }
+
+                // End the game!
+                this.end(this.getWinner());
             }
         }
     }
@@ -82,8 +124,9 @@ public class Game {
     }
 
     private void sendGameboard() {
-        this.firstPlayer.sendGameBoard(this.secondPlayer.getHoles());
-        this.secondPlayer.sendGameBoard(this.firstPlayer.getHoles());
+        boolean giveUp = this.canGiveUp();
+        this.firstPlayer.sendGameBoard(giveUp, this.secondPlayer.getHoles());
+        this.secondPlayer.sendGameBoard(giveUp, this.firstPlayer.getHoles());
     }
 
     private boolean checkActionValidity(Player player, int position) {
@@ -144,9 +187,7 @@ public class Game {
         }
     }
 
-    private void end() {
-        Player winner = this.getWinner();
-
+    private void end(Player winner) {
         // Send the gameboard first!
         this.sendGameboard();
 
@@ -156,6 +197,10 @@ public class Game {
         } else {
             this.server.broadcastPacket(new GameEndedPacket(GameEndedPacket.EndType.DRAW));
         }
+    }
+
+    private boolean canGiveUp() {
+        return getSeedsNb() <= Player.SEEDS_BEFORE_GIVEUP;
     }
 
     private boolean hasEnded() {
@@ -172,6 +217,7 @@ public class Game {
     }
 
     private Player getWinner() {
+        // rule 8: end of the game
         if (this.firstPlayer.getCollectedSeeds() > this.secondPlayer.getCollectedSeeds()) {
             return this.firstPlayer;
         } else if (this.firstPlayer.getCollectedSeeds() < this.secondPlayer.getCollectedSeeds()) {

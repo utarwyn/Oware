@@ -13,4 +13,6 @@ public class GameBoard {
 
     private int collectedSeeds;
 
+    private boolean canGiveUp;
+
 }

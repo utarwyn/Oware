@@ -2,9 +2,11 @@ package fr.ensicaen.oware.server.game;
 
 import fr.ensicaen.oware.server.net.Capitalizer;
 import fr.ensicaen.oware.server.net.packets.GameEndedPacket;
+import fr.ensicaen.oware.server.net.packets.GiveUpPacket;
 import fr.ensicaen.oware.server.net.packets.PlayPacket;
 import fr.ensicaen.oware.server.net.packets.UpdateGameBoardPacket;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Arrays;
 
@@ -13,6 +15,8 @@ public class Player {
     static final int HOLES_PER_PLAYER = 6;
 
     static final int MAX_COLLECTED_SEEDS = 25;
+
+    static final int SEEDS_BEFORE_GIVEUP = 10;
 
     private Capitalizer capitalizer;
 
@@ -24,6 +28,10 @@ public class Player {
 
     @Getter
     private int collectedSeeds;
+
+    @Getter
+    @Setter
+    private boolean giveUp;
 
     Player(int index, Capitalizer capitalizer) {
         this.index = index;
@@ -57,12 +65,16 @@ public class Player {
         this.collectedSeeds += n;
     }
 
-    void sendGameBoard(Hole[] opponentHoles) {
-        this.capitalizer.sendPacket(new UpdateGameBoardPacket(this.holes, opponentHoles, this.collectedSeeds));
+    void sendGameBoard(boolean canGiveUp, Hole[] opponentHoles) {
+        this.capitalizer.sendPacket(new UpdateGameBoardPacket(this.holes, opponentHoles, this.collectedSeeds, canGiveUp));
     }
 
     void sendPlayAction() {
         this.capitalizer.sendPacket(new PlayPacket());
+    }
+
+    void sendGiveUpProposal() {
+        this.capitalizer.sendPacket(new GiveUpPacket(GiveUpPacket.ActionType.PROPOSE));
     }
 
     void sendEndGame(GameEndedPacket.EndType endType) {

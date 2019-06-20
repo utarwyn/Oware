@@ -22,6 +22,7 @@ public class PlayPacket extends Packet {
         Platform.runLater(() -> {
             GameController controller = this.application.getStage().getController();
             controller.displayMyTurnText(true);
+            controller.enableGiveUpButton(true);
         });
     }
 

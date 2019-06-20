@@ -12,6 +12,10 @@
     <Text fx:id="collected" text="Collected seeds: 0" layoutX="25" layoutY="120"/>
     <Text fx:id="myTurnText" text="It's your turn!" layoutX="25" layoutY="135" visible="false"/>
 
+    <Button fx:id="giveupButton" text="Abandonner" prefHeight="40" prefWidth="200"
+            onMouseClicked="#onGiveUpButtonClicked"
+            textAlignment="CENTER" visible="false" layoutX="25" layoutY="160"/>
+
     <GridPane alignment="center" hgap="10" vgap="10" fx:id="opponentHolesPane" layoutY="30">
         <padding>
             <Insets top="25" right="25" bottom="25" left="25"/>
