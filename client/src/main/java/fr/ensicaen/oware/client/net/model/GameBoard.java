@@ -1,4 +1,4 @@
-package fr.ensicaen.oware.client.game;
+package fr.ensicaen.oware.client.net.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

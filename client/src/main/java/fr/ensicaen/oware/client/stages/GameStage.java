@@ -2,6 +2,7 @@ package fr.ensicaen.oware.client.stages;
 
 import fr.ensicaen.oware.client.controllers.GameController;
 import javafx.application.Platform;
+import javafx.scene.text.Font;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
@@ -39,6 +40,9 @@ public class GameStage extends OwareStage {
             Platform.exit();
             System.exit(0);
         });
+
+        // Load custom fonts for this stage.
+        Font.loadFont(getClass().getResourceAsStream("/fonts/BreeSerif-Regular.otf"), 12);
 
         getScene().setFill(null);
     }
