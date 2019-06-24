@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class Hole {
 
-    private static final int DEFAULT_SEEDS = 2;
+    private static final int DEFAULT_SEEDS = 4;
 
     private int seeds;
 
