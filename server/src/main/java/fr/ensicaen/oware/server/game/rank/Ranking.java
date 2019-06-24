@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,12 +28,19 @@ public class Ranking {
     public Ranking() {
         if (!SCORES_FILE.exists()) {
             SCORES_FILE.getParentFile().mkdirs();
+            try {
+                SCORES_FILE.createNewFile();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private List<RankPlayer> readTopScores() {
+    public List<RankPlayer> readTopScores() {
         try (FileReader fileReader = new FileReader(SCORES_FILE)) {
-            return GSON.fromJson(fileReader, RANK_PLAYERS_TYPE);
+            List<RankPlayer> rankPlayers = GSON.fromJson(fileReader, RANK_PLAYERS_TYPE);
+            return rankPlayers == null ? new ArrayList<>() : rankPlayers;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,6 +60,7 @@ public class Ranking {
         List<RankPlayer> rankPlayers = this.readTopScores();
         rankPlayers.add(rankPlayer);
         rankPlayers = rankPlayers.stream().sorted().limit(MAX_SCORES).collect(Collectors.toList());
+        Collections.reverse(rankPlayers);
         this.writeTopScores(rankPlayers);
         return rankPlayers;
     }

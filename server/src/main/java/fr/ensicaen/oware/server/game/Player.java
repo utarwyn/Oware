@@ -1,5 +1,6 @@
 package fr.ensicaen.oware.server.game;
 
+import fr.ensicaen.oware.server.game.rank.RankPlayer;
 import fr.ensicaen.oware.server.net.Capitalizer;
 import fr.ensicaen.oware.server.net.packets.GameEndedPacket;
 import fr.ensicaen.oware.server.net.packets.GiveUpPacket;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Player {
 
@@ -33,7 +35,11 @@ public class Player {
     @Setter
     private boolean giveUp;
 
-    Player(int index, Capitalizer capitalizer) {
+    @Getter
+    @Setter
+    private String name;
+
+    public Player(int index, Capitalizer capitalizer) {
         this.index = index;
         this.capitalizer = capitalizer;
         this.holes = new Hole[HOLES_PER_PLAYER];
@@ -77,8 +83,8 @@ public class Player {
         this.capitalizer.sendPacket(new GiveUpPacket(GiveUpPacket.ActionType.PROPOSE));
     }
 
-    void sendEndGame(GameEndedPacket.EndType endType) {
-        this.capitalizer.sendPacket(new GameEndedPacket(endType));
+    void sendEndGame(GameEndedPacket.EndType endType, List<RankPlayer> topScores) {
+        this.capitalizer.sendPacket(new GameEndedPacket(endType, topScores));
     }
 
 }

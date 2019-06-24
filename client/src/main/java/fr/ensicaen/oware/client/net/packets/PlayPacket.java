@@ -5,7 +5,7 @@ import fr.ensicaen.oware.client.net.Packet;
 import javafx.application.Platform;
 
 /**
- * Packet sended by the server to say to a client to play.
+ * Packet sent by the server to say to a client to play.
  * It does not contains any specific information.
  *
  * @author Maxime Malgorn <maxime.malgorn@ecole.ensicaen.fr>

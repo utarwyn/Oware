@@ -3,6 +3,7 @@ package fr.ensicaen.oware.client.net;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import fr.ensicaen.oware.client.OwareApp;
+import fr.ensicaen.oware.client.net.packets.PlayerNamePacket;
 import fr.ensicaen.oware.client.stages.MenuStage;
 import javafx.application.Platform;
 import lombok.Getter;
@@ -55,14 +56,16 @@ public class CapitalizeClient implements Runnable {
     /**
      * Try to connect to the server and create the packet handler.
      *
-     * @param host Server host to connect to
-     * @param port Server port to connect to
+     * @param host       Server host to connect to
+     * @param port       Server port to connect to
+     * @param playerName The player name
      * @throws IOException Throwed if the client cannot connect to the server.
      */
-    public void connectToServer(String host, int port) throws IOException {
+    public void connectToServer(String host, int port, String playerName) throws IOException {
         this.socket = new Socket(host, port);
         this.outStream = new PrintWriter(this.socket.getOutputStream(), true);
         new Thread(this).start();
+        this.sendPacket(new PlayerNamePacket(playerName));
     }
 
     /**
@@ -76,14 +79,16 @@ public class CapitalizeClient implements Runnable {
             while ((inputLine = reader.readLine()) != null) {
                 this.handlePacket(inputLine);
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 
         // Close the socket when the connection seems to be interrupted
         try {
             this.closeSocket();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -120,7 +125,8 @@ public class CapitalizeClient implements Runnable {
         Platform.runLater(() -> {
             try {
                 this.application.displayStage(new MenuStage(true));
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         });

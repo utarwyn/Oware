@@ -42,6 +42,9 @@ public class MenuController extends Controller {
     private TextField portTextField;
 
     @FXML
+    private TextField playerNameTextField;
+
+    @FXML
     private Text errorMessage;
 
     @FXML
@@ -70,21 +73,29 @@ public class MenuController extends Controller {
      */
     public void onConnectButtonClick() {
         String hostname = this.hostnameTextField.getText();
-        String port = this.portTextField.getText();
+        String port     = this.portTextField.getText();
 
         this.errorMessage.setVisible(false);
+
+        if (this.playerNameTextField.getText().isEmpty()) {
+            this.showErrorMessage("Username can't be empty.");
+            return;
+        }
 
         if (REGEX_HOSTNAME.matcher(hostname).matches()) {
             if (REGEX_PORT.matcher(port).matches()) {
                 try {
                     this.tryToConnect(hostname, Integer.parseInt(port));
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     this.showErrorMessage("Cannot connect to the server. Please retry.");
                 }
-            } else {
+            }
+            else {
                 this.showErrorMessage("The port seems to be incorrect.");
             }
-        } else {
+        }
+        else {
             this.showErrorMessage("The hostname seems to be incorrect.");
         }
     }
@@ -117,7 +128,7 @@ public class MenuController extends Controller {
      * @throws IOException Throwed if the client cannot connect to the server.
      */
     private void tryToConnect(String hostname, int port) throws IOException {
-        this.application.getClient().connectToServer(hostname, port);
+        this.application.getClient().connectToServer(hostname, port, this.playerNameTextField.getText());
         this.application.displayStage(new GameStage());
     }
 

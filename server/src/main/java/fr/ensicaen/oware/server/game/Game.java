@@ -1,11 +1,17 @@
 package fr.ensicaen.oware.server.game;
 
 import fr.ensicaen.oware.server.OwareServer;
+import fr.ensicaen.oware.server.game.rank.RankPlayer;
+import fr.ensicaen.oware.server.game.rank.Ranking;
 import fr.ensicaen.oware.server.net.CapitalizeServer;
 import fr.ensicaen.oware.server.net.packets.GameEndedPacket;
 import fr.ensicaen.oware.server.util.CyclicIterator;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class Game {
 
@@ -19,13 +25,16 @@ public class Game {
 
     private Player currentPlayer;
 
+    private Ranking ranking;
+
     public Game(OwareServer server) {
         System.out.println("Game started!");
 
         this.server = server.getCapitalizeServer();
-        this.firstPlayer = new Player(0, this.server.getFirstClient());
-        this.secondPlayer = new Player(1, this.server.getSecondClient());
+        this.firstPlayer = this.server.getFirstClient().getPlayer();
+        this.secondPlayer = this.server.getSecondClient().getPlayer();
         this.currentPlayer = new Random().nextInt() > 0.5 ? this.firstPlayer : this.secondPlayer;
+        this.ranking = new Ranking();
     }
 
     public void nextRound() {
@@ -192,10 +201,13 @@ public class Game {
         this.sendGameboard();
 
         if (winner != null) {
-            winner.sendEndGame(GameEndedPacket.EndType.WIN);
-            getOpponent(winner).sendEndGame(GameEndedPacket.EndType.LOSE);
+            RankPlayer       rankPlayer = new RankPlayer(winner.getName(), winner.getCollectedSeeds());
+            List<RankPlayer> topScores  = this.ranking.handleNewScore(rankPlayer);
+            winner.sendEndGame(GameEndedPacket.EndType.WIN, topScores);
+            this.getOpponent(winner).sendEndGame(GameEndedPacket.EndType.LOSE, topScores);
         } else {
-            this.server.broadcastPacket(new GameEndedPacket(GameEndedPacket.EndType.DRAW));
+            List<RankPlayer> topScores = this.ranking.readTopScores();
+            this.server.broadcastPacket(new GameEndedPacket(GameEndedPacket.EndType.DRAW, topScores));
         }
     }
 

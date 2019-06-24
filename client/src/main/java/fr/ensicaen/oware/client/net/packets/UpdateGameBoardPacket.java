@@ -1,15 +1,15 @@
 package fr.ensicaen.oware.client.net.packets;
 
 import fr.ensicaen.oware.client.controllers.GameController;
+import fr.ensicaen.oware.client.net.Packet;
 import fr.ensicaen.oware.client.net.model.GameBoard;
 import fr.ensicaen.oware.client.net.model.Hole;
-import fr.ensicaen.oware.client.net.Packet;
 import javafx.application.Platform;
 
 import java.util.Arrays;
 
 /**
- * Packet sended by the server to update the game board.
+ * Packet sent by the server to update the game board.
  * It will trigger the scene refreshing with the game board data.
  *
  * @author Maxime Malgorn <maxime.malgorn@ecole.ensicaen.fr>

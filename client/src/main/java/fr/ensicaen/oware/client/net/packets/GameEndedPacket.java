@@ -1,15 +1,19 @@
 package fr.ensicaen.oware.client.net.packets;
 
 import fr.ensicaen.oware.client.net.Packet;
+import fr.ensicaen.oware.client.net.model.RankPlayer;
 import fr.ensicaen.oware.client.stages.MenuStage;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 import java.io.IOException;
+import java.util.List;
 
 public class GameEndedPacket extends Packet {
 
     private EndType type;
+
+    private List<RankPlayer> topScores;
 
     @Override
     public void onReceive() {
@@ -24,6 +28,8 @@ public class GameEndedPacket extends Packet {
                 alert.setHeaderText("Nobody wins!");
             }
 
+            alert.setContentText(this.buildDisplayTopScores(this.topScores));
+
             alert.showAndWait();
 
             // Return to the menu
@@ -37,6 +43,14 @@ public class GameEndedPacket extends Packet {
 
     public enum EndType {
         WIN, LOSE, DRAW
+    }
+
+    private String buildDisplayTopScores(List<RankPlayer> rankPlayers) {
+        StringBuilder builder = new StringBuilder("Top des scores : \n");
+        rankPlayers.forEach(
+                rankPlayer -> builder.append(rankPlayer.getPlayerName()).append(" - ").append(rankPlayer.getScore()).append("\n")
+        );
+        return builder.toString();
     }
 
 }

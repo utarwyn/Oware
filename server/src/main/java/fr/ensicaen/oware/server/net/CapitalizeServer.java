@@ -2,6 +2,7 @@ package fr.ensicaen.oware.server.net;
 
 import fr.ensicaen.oware.server.OwareServer;
 import fr.ensicaen.oware.server.game.Game;
+import fr.ensicaen.oware.server.game.Player;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -38,9 +39,11 @@ public class CapitalizeServer {
 
                     if (this.firstClient == null) {
                         this.firstClient = capitalizer;
+                        capitalizer.setPlayer(new Player(0, capitalizer));
                         System.out.println("First client connected!");
                     } else if (this.secondClient == null) {
                         this.secondClient = capitalizer;
+                        capitalizer.setPlayer(new Player(1, capitalizer));
                         System.out.println("Second client connected!");
 
                         this.server.setGame(new Game(this.server));
