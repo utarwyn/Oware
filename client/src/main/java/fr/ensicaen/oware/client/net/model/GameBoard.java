@@ -1,4 +1,4 @@
-package fr.ensicaen.oware.client.game;
+package fr.ensicaen.oware.client.net.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,5 +12,7 @@ public class GameBoard {
     private Hole[] opponentHoles;
 
     private int collectedSeeds;
+
+    private boolean canGiveUp;
 
 }

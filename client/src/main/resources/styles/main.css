@@ -1,2 +1,32 @@
-.main-panel {
+.text-collected {
+    -fx-font-family: 'BreeSerif-Regular', sans-serif;
+    -fx-text-alignment: center;
+    -fx-fill: #ffffff;
+    -fx-font-size: 2em;
+}
+
+.text-myturn {
+    -fx-font-family: 'BreeSerif-Regular', sans-serif;
+    -fx-text-alignment: center;
+    -fx-fill: #383838;
+    -fx-font-size: 1.1em;
+}
+
+.giveup-button {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18px;
+    -fx-text-alignment: center;
+}
+
+.close-button {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-background-color: #f64907;
+    -fx-background-radius: 0;
+}
+
+.close-button:hover, .close-button:focused {
+    -fx-background-color: #cc3d07;
 }

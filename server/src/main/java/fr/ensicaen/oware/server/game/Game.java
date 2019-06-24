@@ -1,14 +1,17 @@
 package fr.ensicaen.oware.server.game;
 
 import fr.ensicaen.oware.server.OwareServer;
+import fr.ensicaen.oware.server.net.CapitalizeServer;
+import fr.ensicaen.oware.server.net.packets.GameEndedPacket;
 import fr.ensicaen.oware.server.util.CyclicIterator;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Game {
+
+    private static final int MAX_SEEDS_INGAME = 6;
+
+    private CapitalizeServer server;
 
     private Player firstPlayer;
 
@@ -18,12 +21,18 @@ public class Game {
 
     public Game(OwareServer server) {
         System.out.println("Game started!");
-        this.firstPlayer = new Player(0, server.getCapitalizeServer().getFirstClient());
-        this.secondPlayer = new Player(1, server.getCapitalizeServer().getSecondClient());
+
+        this.server = server.getCapitalizeServer();
+        this.firstPlayer = new Player(0, this.server.getFirstClient());
+        this.secondPlayer = new Player(1, this.server.getSecondClient());
         this.currentPlayer = new Random().nextInt() > 0.5 ? this.firstPlayer : this.secondPlayer;
     }
 
     public void nextRound() {
+        // rule 9: reset players' give up state
+        this.firstPlayer.setGiveUp(false);
+        this.secondPlayer.setGiveUp(false);
+
         // Changing current player
         this.currentPlayer = this.currentPlayer == this.firstPlayer ? this.secondPlayer : this.firstPlayer;
 
@@ -64,12 +73,48 @@ public class Game {
 
             // Rule 6,8: check if the game has ended
             if (this.hasEnded()) {
-                System.out.println("Game ended.");
-                // Send the gameboard, TODO end-game packets
-                this.sendGameboard();
+                this.end(this.getWinner());
             } else {
                 // Now going to the next round!
                 this.nextRound();
+            }
+        }
+    }
+
+    public void handleGiveUpProposal(Player player) {
+        if (this.canGiveUp() && !player.isGiveUp() && this.currentPlayer == player) {
+            player.setGiveUp(true);
+            getOpponent(player).sendGiveUpProposal();
+        }
+    }
+
+    public void handleGiveUp(Player player) {
+        if (this.canGiveUp() && !player.isGiveUp() && getOpponent(this.currentPlayer) == player) {
+            player.setGiveUp(true);
+
+            // In some cases, there is no winner.
+            int seeds = this.getSeedsNb();
+
+            if (seeds < 6 && this.firstPlayer.getCollectedSeeds() <= 24
+                    && this.secondPlayer.getCollectedSeeds() <= 24) {
+                this.end(null);
+            }
+            // Else, we need to distribute all seeds to players
+            else {
+                // player is one that accept the game ending
+                getOpponent(player).collectSeeds(seeds / 2);
+                player.collectSeeds((int) Math.ceil(seeds / 2f));
+
+                // Empty the gameboard
+                for (Hole hole : this.firstPlayer.getHoles()) {
+                    hole.setSeeds(0);
+                }
+                for (Hole hole : this.secondPlayer.getHoles()) {
+                    hole.setSeeds(0);
+                }
+
+                // End the game!
+                this.end(this.getWinner());
             }
         }
     }
@@ -79,8 +124,9 @@ public class Game {
     }
 
     private void sendGameboard() {
-        this.firstPlayer.sendGameBoard(this.secondPlayer.getHoles());
-        this.secondPlayer.sendGameBoard(this.firstPlayer.getHoles());
+        boolean giveUp = this.canGiveUp();
+        this.firstPlayer.sendGameBoard(giveUp, this.secondPlayer.getHoles());
+        this.secondPlayer.sendGameBoard(giveUp, this.firstPlayer.getHoles());
     }
 
     private boolean checkActionValidity(Player player, int position) {
@@ -141,9 +187,44 @@ public class Game {
         }
     }
 
+    private void end(Player winner) {
+        // Send the gameboard first!
+        this.sendGameboard();
+
+        if (winner != null) {
+            winner.sendEndGame(GameEndedPacket.EndType.WIN);
+            getOpponent(winner).sendEndGame(GameEndedPacket.EndType.LOSE);
+        } else {
+            this.server.broadcastPacket(new GameEndedPacket(GameEndedPacket.EndType.DRAW));
+        }
+    }
+
+    private boolean canGiveUp() {
+        return getSeedsNb() <= Player.SEEDS_BEFORE_GIVEUP;
+    }
+
     private boolean hasEnded() {
         // rule 6: the opponent must play in the next round (he has to be fed)
-        return !this.getOpponent(this.currentPlayer).canPlay();
+        // rule 8: game ending conditions
+        return !this.getOpponent(this.currentPlayer).canPlay()
+                || this.firstPlayer.getCollectedSeeds() >= Player.MAX_COLLECTED_SEEDS
+                || this.secondPlayer.getCollectedSeeds() >= Player.MAX_COLLECTED_SEEDS
+                || this.getSeedsNb() <= MAX_SEEDS_INGAME;
+    }
+
+    private int getSeedsNb() {
+        return Arrays.stream(this.firstPlayer.getHoleSeeds()).sum() + Arrays.stream(this.secondPlayer.getHoleSeeds()).sum();
+    }
+
+    private Player getWinner() {
+        // rule 8: end of the game
+        if (this.firstPlayer.getCollectedSeeds() > this.secondPlayer.getCollectedSeeds()) {
+            return this.firstPlayer;
+        } else if (this.firstPlayer.getCollectedSeeds() < this.secondPlayer.getCollectedSeeds()) {
+            return this.secondPlayer;
+        } else {
+            return null;
+        }
     }
 
 }

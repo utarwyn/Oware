@@ -1,6 +1,7 @@
 package fr.ensicaen.oware.client.controllers;
 
 import fr.ensicaen.oware.client.stages.GameStage;
+import fr.ensicaen.oware.client.stages.MenuStage;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -59,7 +60,7 @@ public class MenuController extends Controller {
         this.portTextField.setOnKeyPressed(this::onFieldKeyPressed);
 
         // Connection has existed before but its now closed
-        if (this.application.getClient().getSocket() != null) {
+        if (((MenuStage) this.stage).isConnectionError()) {
             this.showErrorMessage("Connection to the server has been interrupted.");
         }
     }
